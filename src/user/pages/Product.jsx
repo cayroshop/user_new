@@ -8,12 +8,11 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { useCart } from "react-use-cart";
 import toast from "react-hot-toast";
-import axiosInstance from '../../axiosInstance';
+import axiosInstance from "../../axiosInstance";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Magnifier from "../components/extra/Magnifier";
 
-import QuantitySelector from '../components/extra/QuantitySelector';
-
+import QuantitySelector from "../components/extra/QuantitySelector";
 
 // Import Swiper styles
 import "swiper/css";
@@ -24,16 +23,13 @@ import "swiper/css/pagination";
 
 // import required modules
 import { FreeMode, Navigation, Thumbs, Pagination } from "swiper/modules";
-import { useBlogContext } from '../../fetchdata/BlogContext';
+import { useBlogContext } from "../../fetchdata/BlogContext";
 import { Helmet } from "react-helmet";
 import getCookie from "../components/extra/getCookie";
 import CreateSlug from "../components/extra/CreateSlug";
 
-
 const Product = () => {
-
   const navigate = useNavigate();
-
   const [layout, setLayout] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -42,11 +38,10 @@ const Product = () => {
 
   const [Products, setProducts] = useState([]);
 
-
   const { promoCodeInfo } = useBlogContext();
 
   // const userId = localStorage.getItem('userId');
-  const userId = getCookie('userId');
+  const userId = getCookie("userId");
 
   const [SubmitLoading, setSubmitLoading] = useState(true); // Add loading state
 
@@ -64,12 +59,10 @@ const Product = () => {
     setIsOpen(!isOpen);
   };
 
-
-
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
-    userId: userId || '',
+    userId: userId || "",
     productId: id,
     rating: "",
     comment: "",
@@ -79,14 +72,13 @@ const Product = () => {
     setIsLoading(true);
     setIsProducts(true);
     // Update the productId in the formData when id changes
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
       productId: id,
       rating: "",
       comment: "",
     }));
   }, [id]); // This useEffect will re-run whenever id changes
-
 
   const { addItem, updateItemQuantity, items } = useCart();
   const [selectedColor, setSelectedColor] = useState(""); // State to hold the selected color
@@ -101,20 +93,13 @@ const Product = () => {
   const [isOpenReview, setIsOpenReview] = useState(false);
   const [activeData, setActiveData] = useState([]);
 
-
-  
-
-
   const toggleReviewPopup = () => {
     if (userId) {
       setIsOpenReview(!isOpenReview);
-    }
-    else {
+    } else {
       toast.error("Please Login First", TotalQuantity);
     }
-
   };
-
 
   const handleColorChange = (event) => {
     setSelectedColor(event.target.value); // Update the selected color state when a radio button is checked
@@ -131,14 +116,12 @@ const Product = () => {
     }
   };
 
-
   const getData = async () => {
     try {
       const { data } = await axiosInstance.get(`/home-layout-data`);
       setLayout(data.homeLayout);
       setIsLoading(false); // Set loading state to false in case of an error
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       toast.error("Error fetching Home layout!");
       setIsLoading(false); // Set loading state to false in case of an error
@@ -150,81 +133,62 @@ const Product = () => {
     getProducts();
   }, [id]);
 
- 
   const handleButtonClick = async (variantTitle, value) => {
+    setSelectedValues((prevState) => {
+      const isSelected =
+        prevState[variantTitle] &&
+        prevState[variantTitle][0][variantTitle] === value;
 
-    setSelectedValues(prevState => {
- 
-      const isSelected = prevState[variantTitle] && prevState[variantTitle][0][variantTitle] === value;
- 
       return {
         ...prevState,
-        [variantTitle]: isSelected ? [] : [{ [variantTitle]: value }]
+        [variantTitle]: isSelected ? [] : [{ [variantTitle]: value }],
       };
     });
     try {
-      setIsLoading(false)
-      
-      const response = await axiosInstance.get(`/products-variations-fillter?title=${variantTitle}&value=${value}&hsn=${prohsn}`);
-      const proid = response.data
+      setIsLoading(false);
+
+      const response = await axiosInstance.get(
+        `/products-variations-fillter?title=${variantTitle}&value=${value}&hsn=${prohsn}`
+      );
+      const proid = response.data;
       if (proid[0]._id) {
-        navigate(`/product/${proid[0]._id}`)
+        navigate(`/product/${proid[0]._id}`);
       }
- 
     } catch (error) {
       console.error("Error fetching products:", error);
-    }finally{
+    } finally {
       setIsLoading(true);
     }
-
-
   };
 
-
-
   const handleAddToCart = async (product, buy) => {
- 
-    const existingProduct = items.find(
-      (item) => item.id === product.id 
-    );
+    const existingProduct = items.find((item) => item.id === product.id);
 
     if (existingProduct) {
- 
       const updatedQuantity = TotalQuantity;
 
       updateItemQuantity(existingProduct.id, updatedQuantity);
 
       if (buy) {
-        navigate('/checkout')
+        navigate("/checkout");
       }
       toast.success("Product quantity updated in cart");
     } else {
-      
-   
-     await addItemToCart(
-        
-        { ...product, color: selectedColor,TotalQuantity },
+      await addItemToCart(
+        { ...product, color: selectedColor, TotalQuantity },
         TotalQuantity
       );
-      
- 
 
       if (buy) {
-        navigate('/checkout')
+        navigate("/checkout");
       }
- 
     }
-
   };
 
   const handleBuyNow = (product) => {
-
     const buy = TotalQuantity;
     handleAddToCart(product, buy);
-
   };
-
-
 
   const [frontImage, setFrontImage] = useState(null);
   const [overlayImage, setOverlayImage] = useState(null);
@@ -260,14 +224,13 @@ const Product = () => {
 
   const [Varloading, SetVarLoading] = useState(true); // Add loading state
   const [ratings, setRatings] = useState([]);
-  const [totalRating, settotalRating] = useState('');
-  const [averageRating, setaverageRating] = useState('');
+  const [totalRating, settotalRating] = useState("");
+  const [averageRating, setaverageRating] = useState("");
   const [HSNvariations, setHSNVariations] = useState({});
   const [selectedVariation, setSelectedVariation] = useState(null);
 
   const [variationsmap, setVariationsmap] = useState([]);
-  const [prohsn, setprohsn] = useState('');
-
+  const [prohsn, setprohsn] = useState("");
 
   const [activevariations, setactiveVariations] = useState({});
 
@@ -281,12 +244,11 @@ const Product = () => {
     SetVarLoading(true);
     try {
       const { data } = await axiosInstance.get(`/user-product/${id}`);
-      const myslug = CreateSlug(data.Product.slug); 
-      const {success} = data;
-      if(success){
-        navigate(`/product/${myslug}/${data.Product._id}`)
-        }
-
+      const myslug = CreateSlug(data.Product.slug);
+      const { success } = data;
+      if (success) {
+        navigate(`/product/${myslug}/${data.Product._id}`);
+      }
     } catch (error) {
       console.error("Error getting product:", error);
     } finally {
@@ -296,25 +258,25 @@ const Product = () => {
     }
   };
 
-
-
-
   const getRating = async () => {
     try {
       const { data } = await axiosInstance.get(`/view-product-rating/${id}`);
- 
-      const myrating = data.productRatings.reverse()
+
+      const myrating = data.productRatings.reverse();
       setRatings(myrating);
       hasUserReviewed();
 
- 
       const totalRating = data.productRatings.length;
       settotalRating(totalRating);
- 
-      const averageRating = totalRating > 0 ? data.productRatings.reduce((acc, rating) => acc + rating.rating, 0) / totalRating : 0;
+
+      const averageRating =
+        totalRating > 0
+          ? data.productRatings.reduce(
+              (acc, rating) => acc + rating.rating,
+              0
+            ) / totalRating
+          : 0;
       setaverageRating(averageRating);
-
-
     } catch (error) {
       console.error("Error fetching rating:", error);
     }
@@ -322,16 +284,14 @@ const Product = () => {
   const hasUserReviewed = () => {
     const reviewedRating = ratings.find((rating) => rating.userId === userId);
     const hasReviewed = !!reviewedRating; // Convert to boolean
- 
+
     return hasReviewed;
   };
-
-
 
   const getAttribute = async () => {
     try {
       const { data } = await axiosInstance.get("/all-attribute");
- 
+
       setAttr(data.Attribute);
     } catch (error) {
       console.error("Error fetching attributes:", error);
@@ -339,13 +299,13 @@ const Product = () => {
   };
 
   const handleIncrement = (stock) => {
-    if (TotalQuantity <=  stock) { // Check input length before updating
+    if (TotalQuantity <= stock) {
+      // Check input length before updating
 
       setTotalQuantity(TotalQuantity + 1);
-    }else{
-      toast.error("Product out of stock. ")
+    } else {
+      toast.error("Product out of stock. ");
     }
-
   };
 
   const handleDecrement = () => {
@@ -363,7 +323,7 @@ const Product = () => {
 
   // const handleIncrement = (size, maxLength) => {
   //   const currentValue = sizeQuantities[size] || 0;
- 
+
   //   if (currentValue < maxLength ) {
   //     setSizeQuantities((prevQuantities) => ({
   //       ...prevQuantities,
@@ -393,19 +353,11 @@ const Product = () => {
     }));
   };
 
-
-
-
-
-
-
-
   useEffect(() => {
-    setVariationsmap([])
-    getRating()
+    setVariationsmap([]);
+    getRating();
     getCategory();
     getAttribute();
-
   }, [id]);
 
   const handleTextChange = (e) => {
@@ -473,7 +425,7 @@ const Product = () => {
   const handleMouseDown = (e, position) => {
     setOverlayPosition(position);
   };
- 
+
   const handleMouseUp = () => {
     setIsResizing(false);
   };
@@ -521,14 +473,12 @@ const Product = () => {
   const AddWhishlistData = async () => {
     setWishlistLoading(false);
 
-    if (formData.userId === '') {
-      toast.error('Please Login First');
+    if (formData.userId === "") {
+      toast.error("Please Login First");
       setWishlistLoading(true);
-
-    }
-    else {
+    } else {
       try {
-        await axiosInstance.post('/add-wishlist', formData);
+        await axiosInstance.post("/add-wishlist", formData);
         toast.success("wishlist Added successfully!");
       } catch (error) {
         console.error("Error on wishlist added:", error);
@@ -537,100 +487,93 @@ const Product = () => {
         setWishlistLoading(true);
       }
     }
-
-  }
+  };
 
   const AddCompareData = async () => {
     setCompareLoading(false);
 
-    if (formData.userId === '') {
-      toast.error('Please Login First');
+    if (formData.userId === "") {
+      toast.error("Please Login First");
       setCompareLoading(true);
-
-
-    }
-    else {
+    } else {
       try {
-        await axiosInstance.post('/add-compare', formData);
+        await axiosInstance.post("/add-compare", formData);
         toast.success("Comparsion Added successfully!");
       } catch (error) {
         console.error("Error on compare added:", error);
         toast.error(error.response.data.message);
-
       } finally {
         setCompareLoading(true);
       }
     }
-
-  }
+  };
 
   const submitData = async () => {
     setSubmitLoading(false);
 
-    if (formData.userId === '') {
-      toast.error('Please Login First');
+    if (formData.userId === "") {
+      toast.error("Please Login First");
       setSubmitLoading(true);
 
       return;
-
-    }
-    else {
-      if (formData.rating !== '' || formData.comment !== '') {
+    } else {
+      if (formData.rating !== "" || formData.comment !== "") {
         try {
-          await axiosInstance.post('/add-rating', formData);
+          await axiosInstance.post("/add-rating", formData);
           toggleReviewPopup();
           toast.success("Rating Added successfully!");
           getRating();
         } catch (error) {
           console.error("Error on rating added:", error);
           toast.error(error.response.data.message);
-          setRatings([])
+          setRatings([]);
         } finally {
           setSubmitLoading(true);
         }
-
-      }
-      else {
-        toast.error('Please Fill All Fields');
+      } else {
+        toast.error("Please Fill All Fields");
         setSubmitLoading(true);
       }
     }
-
   };
 
   function formatDate(dateString) {
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('en-US', options);
+    const options = { year: "numeric", month: "short", day: "numeric" };
+    return new Date(dateString).toLocaleDateString("en-US", options);
   }
 
   const isActive = (title, value) => {
- 
     if (!selectedVariation) {
-      return false;  
+      return false;
     }
- 
-    return selectedVariation.title === title && selectedVariation.value === value;
+
+    return (
+      selectedVariation.title === title && selectedVariation.value === value
+    );
   };
 
   return (
     <>
       <Header />
-
-
       <Helmet>
-        {Product.metaTitle && (
-          <title>{Product.metaTitle}</title>
-        )}
+        {Product.metaTitle && <title>{Product.metaTitle}</title>}
         {Product.metaDescription && (
-          <meta name="description" content={Product.metaDescription} />
+          <meta
+            style={{ display: "none" }}
+            name="description"
+            content={encodeURIComponent(Product.metaDescription)}
+          />
         )}
         {Product.metaKeywords && (
-          <meta name="keywords" content={Product.metaKeywords} />
+          <meta
+            style={{ display: "none" }}
+            name="keywords"
+            content={encodeURIComponent(Product.metaKeywords)}
+          />
         )}
       </Helmet>
 
       <div className="whitesmoke pt-4">
-        
         {/* Page Title */}
         {/* Product Card */}
         <div className="container">
@@ -638,73 +581,106 @@ const Product = () => {
             <div className="row g-5 g-lg-10">
               {/* Product gallery */}
               <div className="col-lg-5 productpage">
+                {frontImage && (
+                  <>
+                    <Swiper
+                      onClick={togglePopup}
+                      style={{
+                        "--swiper-navigation-color": "#335599",
+                        "--swiper-pagination-color": "#335599",
+                      }}
+                      spaceBetween={10}
+                      navigation={true}
+                      thumbs={{ swiper: thumbsSwiper }}
+                      modules={[FreeMode, Navigation, Thumbs]}
+                      className={`mySwiper2 hide-desk-pagenation ${
+                        isLoading && "d-none"
+                      }`}
+                    >
+                      <SwiperSlide>
+                        <div
+                          style={{
+                            aspectRatio: "1 / 1",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <img
+                            src={frontImage}
+                            onMouseEnter={() => handleMouseEnter(frontImage)}
+                            onMouseLeave={handleMouseLeave}
+                            onMouseMove={handleMouseMove}
+                            className="m-auto d-block"
+                            alt="Product Image"
+                            style={{
+                              height: "100%",
+                              width: "auto",
+                              objectFit: "cover",
+                              cursor: "url(/assets/img/zoomm.png), auto",
+                            }}
+                          />
+                        </div>
+                      </SwiperSlide>
 
-              {frontImage && (
-  <>
-    <Swiper
-      onClick={togglePopup}
-      style={{
-        "--swiper-navigation-color": "#335599",
-        "--swiper-pagination-color": "#335599",
-      }}
-      spaceBetween={10}
-      navigation={true}
-      thumbs={{ swiper: thumbsSwiper }}
-      modules={[FreeMode, Navigation, Thumbs]}
-      className={`mySwiper2 hide-desk-pagenation ${isLoading && 'd-none'}`}
-    >
-      <SwiperSlide>
-        <div style={{ aspectRatio: "1 / 1", display: "flex", alignItems: "center" }}>
-          <img
-            src={frontImage}
-            onMouseEnter={() => handleMouseEnter(frontImage)}
-            onMouseLeave={handleMouseLeave}
-            onMouseMove={handleMouseMove}
-            className="m-auto d-block"
-            alt="Product Image"
-            style={{ height: "100%", width: "auto", objectFit: "cover", cursor: "url(/assets/img/zoomm.png), auto" }}
-          />
-        </div>
-      </SwiperSlide>
+                      {Images.map((imageUrl, index) => (
+                        <SwiperSlide key={index}>
+                          <div
+                            style={{
+                              aspectRatio: "1 / 1",
+                              display: "flex",
+                              alignItems: "center",
+                            }}
+                          >
+                            <img
+                              src={imageUrl}
+                              onMouseEnter={() => handleMouseEnter(imageUrl)}
+                              onMouseLeave={handleMouseLeave}
+                              onMouseMove={handleMouseMove}
+                              className="m-auto d-block"
+                              alt="Product Image"
+                              style={{
+                                height: "100%",
+                                width: "auto",
+                                objectFit: "cover",
+                                cursor: "url(/assets/img/zoomm.png), auto",
+                              }}
+                            />
+                          </div>
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+                    <Swiper
+                      onSwiper={setThumbsSwiper}
+                      spaceBetween={10}
+                      slidesPerView={4}
+                      freeMode={true}
+                      watchSlidesProgress={true}
+                      modules={[FreeMode, Navigation, Thumbs]}
+                      className={`mySwiper ${isLoading && "d-none"}`}
+                    >
+                      <SwiperSlide>
+                        <img
+                          src={frontImage}
+                          alt="Product Image"
+                          style={{ aspectRatio: "1 / 1", objectFit: "contain" }}
+                        />
+                      </SwiperSlide>
 
-      {Images.map((imageUrl, index) => (
-        <SwiperSlide key={index}>
-          <div style={{ aspectRatio: "1 / 1", display: "flex", alignItems: "center" }}>
-            <img
-              src={imageUrl}
-              onMouseEnter={() => handleMouseEnter(imageUrl)}
-              onMouseLeave={handleMouseLeave}
-              onMouseMove={handleMouseMove}
-              className="m-auto d-block"
-              alt="Product Image"
-              style={{ height: "100%", width: "auto", objectFit: "cover", cursor: "url(/assets/img/zoomm.png), auto" }}
-            />
-          </div>
-        </SwiperSlide>
-      ))}
-    </Swiper>
-    <Swiper
-      onSwiper={setThumbsSwiper}
-      spaceBetween={10}
-      slidesPerView={4}
-      freeMode={true}
-      watchSlidesProgress={true}
-      modules={[FreeMode, Navigation, Thumbs]}
-      className={`mySwiper ${isLoading && 'd-none'}`}
-    >
-      <SwiperSlide>
-        <img src={frontImage} alt="Product Image" style={{ aspectRatio: "1 / 1", objectFit: "contain" }} />
-      </SwiperSlide>
-
-      {Images.map((imageUrl, index) => (
-        <SwiperSlide key={index}>
-          <img src={imageUrl} alt="Product Image" style={{ aspectRatio: "1 / 1", objectFit: "contain" }} />
-        </SwiperSlide>
-      ))}
-    </Swiper>
-  </>
-)}
-
+                      {Images.map((imageUrl, index) => (
+                        <SwiperSlide key={index}>
+                          <img
+                            src={imageUrl}
+                            alt="Product Image"
+                            style={{
+                              aspectRatio: "1 / 1",
+                              objectFit: "contain",
+                            }}
+                          />
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+                  </>
+                )}
 
                 {isLoading && (
                   <>
@@ -714,50 +690,48 @@ const Product = () => {
                     ></div>
                   </>
                 )}
-
-                
               </div>
 
-              {frontImage && isOpen && <>
-                <div class="propop">
-                  < i onClick={togglePopup} class="ri-close-line"></i>
+              {frontImage && isOpen && (
+                <>
+                  <div class="propop">
+                    <i onClick={togglePopup} class="ri-close-line"></i>
 
-                  <Swiper
-                    style={{
-                      "--swiper-navigation-color": "#335599",
-                      "--swiper-pagination-color": "#335599",
-                      "padding-bottom": "40px",
-                    }}
-                    spaceBetween={10}
-                    navigation={true}
-                    pagination={true}
-                    modules={[FreeMode, Navigation, Pagination]}
-                    className="mySwiper2 hide-desk-pagenation"
-                  >
-                    <SwiperSlide>
-                      <img
-                        src={frontImage}
-                        alt="Product Image"
-                        className="m-auto d-block"
-                      />
-                    </SwiperSlide>
+                    <Swiper
+                      style={{
+                        "--swiper-navigation-color": "#335599",
+                        "--swiper-pagination-color": "#335599",
+                        "padding-bottom": "40px",
+                      }}
+                      spaceBetween={10}
+                      navigation={true}
+                      pagination={true}
+                      modules={[FreeMode, Navigation, Pagination]}
+                      className="mySwiper2 hide-desk-pagenation"
+                    >
+                      <SwiperSlide>
+                        <img
+                          src={frontImage}
+                          alt="Product Image"
+                          className="m-auto d-block"
+                        />
+                      </SwiperSlide>
 
-                    {Images.map((imageUrl, index) => (
-                      <>
-                        <SwiperSlide>
-                          <img
-                            src={imageUrl}
-alt="Product Image"
-                            className="m-auto d-block"
-                          />
-                        </SwiperSlide>
-                      </>
-                    ))}
-                  </Swiper>
-
-                </div>
-              </>}
-
+                      {Images.map((imageUrl, index) => (
+                        <>
+                          <SwiperSlide>
+                            <img
+                              src={imageUrl}
+                              alt="Product Image"
+                              className="m-auto d-block"
+                            />
+                          </SwiperSlide>
+                        </>
+                      ))}
+                    </Swiper>
+                  </div>
+                </>
+              )}
 
               {/* Product gallery */}
               {/* Product details */}
@@ -776,36 +750,43 @@ alt="Product Image"
                     ></div>
                   )}
 
-
-
                   <h3 className="product-title fs-3">
-                    {Product.salePrice   && !isLoading ? (
+                    {Product.salePrice && !isLoading ? (
                       <>{Product.title} </>
                     ) : (
                       <>
-                        <div className=" border-bottom pb-2 mb-2"
-                        > <div
-                          className="card-1 skeleton"
-                          style={{ height: 32, borderRadius: 5 }}
-                        ></div>
-
+                        <div className=" border-bottom pb-2 mb-2">
+                          {" "}
+                          <div
+                            className="card-1 skeleton"
+                            style={{ height: 32, borderRadius: 5 }}
+                          ></div>
                         </div>
-
                       </>
                     )}
                   </h3>
                   <div className="border-bottom pb-2 mb-2">
-                    {!averageRating || !totalRating && !isLoading ? (<>
-                      <span className={`star-rating star-0 } fs-6 align-middle`} />
-                      <span className="d-inline-block fs-sm ms-2">
-                        0 by 0 Reviews
-                      </span>
-                    </>) : (<>
-                      <span className={`star-rating star-${averageRating * 2} fs-6 align-middle`} />
-                      <span className="d-inline-block fs-sm ms-2">
-                        {averageRating} by {totalRating} Reviews
-                      </span>
-                    </>)}
+                    {!averageRating || (!totalRating && !isLoading) ? (
+                      <>
+                        <span
+                          className={`star-rating star-0 } fs-6 align-middle`}
+                        />
+                        <span className="d-inline-block fs-sm ms-2">
+                          0 by 0 Reviews
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span
+                          className={`star-rating star-${
+                            averageRating * 2
+                          } fs-6 align-middle`}
+                        />
+                        <span className="d-inline-block fs-sm ms-2">
+                          {averageRating} by {totalRating} Reviews
+                        </span>
+                      </>
+                    )}
                   </div>
                   {/* Product Price */}
                   <div className="product-price mb-3">
@@ -828,11 +809,10 @@ alt="Product Image"
                               {Math.round(
                                 ((Product.regularPrice - Product.salePrice) /
                                   Product.regularPrice) *
-                                100
+                                  100
                               )}
                               % (₹{Product.regularPrice - Product.salePrice})
                             </span>
-
                           </div>
                         </div>
                       </>
@@ -848,10 +828,6 @@ alt="Product Image"
                     )}
                   </div>
                   {/* Product Price */}
-
-
-         
-
 
                   {/* <h5 className="h6 mb-2">Color</h5>
                 
@@ -949,34 +925,55 @@ alt="Product Image"
                       </div>
                     ))} */}
 
-{variationsmap?.length > 0 && variationsmap.map((variant, index) => (
-  <div key={index} className="row d-block mb-2">
-    {variant.title !== 'Discount' && (
-      <>
-       <div className="col-md-12 mb-2 mb-2"> <b> {variant.title} </b></div>
-    <div className="col-md-12" >
-      {variant?.values.length > 0 && variant?.values
-        .filter((value, idx, self) => self.indexOf(value) === idx) // Filter out duplicates
-        .map((value, idx) => {
-   
-          return (
-            <button
-              key={idx}
-              className={`btn me-2 ${selectedValues[variant.title]?.[0]?.[variant.title] === value ? 'active' : ''}`}
-              onClick={() => handleButtonClick(variant.title, value)}
-              disabled={selectedValues[variant.title] && selectedValues[variant.title][0][variant.title] === value}
-            >
-              {value}
-            </button>
-          );
-        })}
-    </div>
-       </>
-    )}
-   
-  </div>
-))}
-
+                    {variationsmap?.length > 0 &&
+                      variationsmap.map((variant, index) => (
+                        <div key={index} className="row d-block mb-2">
+                          {variant.title !== "Discount" && (
+                            <>
+                              <div className="col-md-12 mb-2 mb-2">
+                                {" "}
+                                <b> {variant.title} </b>
+                              </div>
+                              <div className="col-md-12">
+                                {variant?.values.length > 0 &&
+                                  variant?.values
+                                    .filter(
+                                      (value, idx, self) =>
+                                        self.indexOf(value) === idx
+                                    ) // Filter out duplicates
+                                    .map((value, idx) => {
+                                      return (
+                                        <button
+                                          key={idx}
+                                          className={`btn me-2 ${
+                                            selectedValues[
+                                              variant.title
+                                            ]?.[0]?.[variant.title] === value
+                                              ? "active"
+                                              : ""
+                                          }`}
+                                          onClick={() =>
+                                            handleButtonClick(
+                                              variant.title,
+                                              value
+                                            )
+                                          }
+                                          disabled={
+                                            selectedValues[variant.title] &&
+                                            selectedValues[variant.title][0][
+                                              variant.title
+                                            ] === value
+                                          }
+                                        >
+                                          {value}
+                                        </button>
+                                      );
+                                    })}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      ))}
 
                     <div>
                       {/* Selected values:
@@ -988,111 +985,106 @@ alt="Product Image"
                         ))}
                       </ul> */}
                     </div>
-
                   </div>
                   <hr />
- 
-      
+
                   {isLoading ? (
-                  <>
-                    <div
-                      className="card-1 skeleton"
-                      style={{ height: 480, borderRadius: 20 }}
-                    ></div>
-                  </>
-                ):(  
+                    <>
+                      <div
+                        className="card-1 skeleton"
+                        style={{ height: 480, borderRadius: 20 }}
+                      ></div>
+                    </>
+                  ) : (
+                    <div className="d-flex align-items-center">
+                      <div className="quantity-products d-flex justify-content-center">
+                        <button
+                          className="quantity-btn-minus"
+                          onClick={handleDecrement}
+                        >
+                          <i className="ri-subtract-line" />
+                        </button>
+                        <input
+                          id="quantityNumber1"
+                          className="quantity-number"
+                          type="number"
+                          value={TotalQuantity}
+                          maxLength={Product?.stock}
+                          onChange={handleQuantityChange}
+                        />
+                        <button
+                          className="quantity-btn-plus"
+                          onClick={() =>
+                            handleIncrement(Product && Product?.stock)
+                          }
+                        >
+                          <i className="ri-add-line" />
+                        </button>
+                      </div>
 
-                  <div className="d-flex align-items-center">
-           
+                      <div className="d-flex gap-2 justify-content-between ps-3">
+                        <button
+                          disabled={Product.stock === 0}
+                          className="btn btn-primary d-flex align-items-center justify-content-center w-100"
+                          type="button"
+                          onClick={() => {
+                            handleAddToCart({
+                              id: Product._id,
+                              title: Product.title,
+                              image: frontImage,
+                              regularPrice: Product.regularPrice,
+                              price: Product.salePrice,
+                              color: selectedColor,
+                              customise: pdfBase64,
+                              TotalQuantity: TotalQuantity,
+                              SelectedSizes: SelectedSizes,
+                              weight: Product.weight,
+                              gst: Product.gst,
+                              stock: Product.stock,
+                            });
+                          }}
+                        >
+                          <i className="ri-shopping-cart-2-line" />
+                          <span className="d-none d-sm-inline ms-2">
+                            Add To Cart
+                          </span>
+                        </button>
 
-  <div className="quantity-products d-flex justify-content-center">
-      <button className="quantity-btn-minus" onClick={handleDecrement}>
-        <i className="ri-subtract-line" />
-      </button>
-      <input
-        id="quantityNumber1"
-        className="quantity-number"
-        type="number"
-        value={TotalQuantity}
-        maxLength={Product?.stock}
-        onChange={handleQuantityChange}
-      />
-      <button className="quantity-btn-plus" onClick={() => handleIncrement(Product && Product?.stock)}>
-        <i className="ri-add-line" />
-      </button>
-    </div>
-
-
-        
-   <div className="d-flex gap-2 justify-content-between ps-3">
-                      <button disabled={Product.stock === 0}
-                        className="btn btn-primary d-flex align-items-center justify-content-center w-100"
-                        type="button" onClick={() => {
-
-                          handleAddToCart({
-                            id: Product._id,
-                            title: Product.title,
-                            image: frontImage,
-                            regularPrice: Product.regularPrice,
-                            price: Product.salePrice,
-                            color: selectedColor,
-                            customise: pdfBase64,
-                            TotalQuantity: TotalQuantity,
-                            SelectedSizes: SelectedSizes,
-                            weight: Product.weight,
-                            gst: Product.gst,
-                            stock: Product.stock,
-                          });
-                        }}
-                      >
-                        <i className="ri-shopping-cart-2-line" />
-                        <span className="d-none d-sm-inline ms-2">
-                          Add To Cart
-                        </span>
-                      </button>
-
-                      <button
-                        className="btn btn-success d-flex align-items-center justify-content-center w-100"
-                        type="button"
-                        onClick={() => {
-
-                          handleBuyNow({
-                            id: Product._id,
-                            title: Product.title,
-                            image: frontImage,
-                            regularPrice: Product.regularPrice,
-                            price: Product.salePrice,
-                            color: selectedColor,
-                            customise: pdfBase64,
-                            TotalQuantity: TotalQuantity,
-                            SelectedSizes: SelectedSizes,
-                            weight: Product.weight,
-                            gst: Product.gst,
-                          });
-                        }}
-
-                      >
-
-                        <span className="d-sm-inline ms-2">Buy Now</span>
-                      </button>
-                    </div> 
- 
-                  </div>
+                        <button
+                          className="btn btn-success d-flex align-items-center justify-content-center w-100"
+                          type="button"
+                          onClick={() => {
+                            handleBuyNow({
+                              id: Product._id,
+                              title: Product.title,
+                              image: frontImage,
+                              regularPrice: Product.regularPrice,
+                              price: Product.salePrice,
+                              color: selectedColor,
+                              customise: pdfBase64,
+                              TotalQuantity: TotalQuantity,
+                              SelectedSizes: SelectedSizes,
+                              weight: Product.weight,
+                              gst: Product.gst,
+                            });
+                          }}
+                        >
+                          <span className="d-sm-inline ms-2">Buy Now</span>
+                        </button>
+                      </div>
+                    </div>
                   )}
 
-                  
                   {/* Buttons */}
                   <div className="d-flex pt-2 mb-4 col-lg-6">
                     <div className="w-50 me-3">
-
                       {SubmitWishlist ? (
                         <button
                           className="btn btn-accent d-block w-100"
                           type="button"
                           onClick={AddWhishlistData}
                         >
-                          Add to
-                          Wishlist
+                          Add to Wishlist
                         </button>
                       ) : (
                         <button
@@ -1108,11 +1100,8 @@ alt="Product Image"
                           ></span>
                         </button>
                       )}
-
-
                     </div>
                     <div className="w-50">
-
                       {SubmitCompare ? (
                         <button
                           className="btn btn-accent d-block w-100"
@@ -1135,8 +1124,6 @@ alt="Product Image"
                           ></span>
                         </button>
                       )}
-
-
                     </div>
                   </div>
                   {/* Buttons */}
@@ -1147,8 +1134,10 @@ alt="Product Image"
                   </h5>
                   <ul>
                     {" "}
-
-                    {Product.features && (Product.features.map(feature => (<li key={feature._id}  > {feature} </li>)))}
+                    {Product.features &&
+                      Product.features.map((feature) => (
+                        <li key={feature._id}> {feature} </li>
+                      ))}
                   </ul>
 
                   {/* Info List */}
@@ -1181,42 +1170,32 @@ alt="Product Image"
               >
                 <div className="accordion-body">
                   <div className="row g-10">
-
-                    {Specifications.map(
-                      (specification, specIndex) => (
-
-                        <>
-                          <div key={specIndex} className="col-12 col-md-6">
-                            <h6 className="text-accent border-bottom pb-2 mb-2">
-                              {specification.heading}
-                            </h6>
-                            <ul className="list-unstyled fs-sm pb-2">
-
-                              {specification.labels.map((label, labelIndex) => (
-                                <>
-                                  <li className="d-flex justify-content-between gap-2"  >
-                                    <span className="text-body-secondary" style={{ width: "50%" }} >{label.label}</span>
-                                    <span style={{ width: "50%" }}>{label.value}</span>
-                                  </li>
-
-                                </>
-
-                              ))}
-
-
-
-                            </ul>
-
-                          </div>
-
-
-                        </>
-
-                      )
-                    )}
-
-
-
+                    {Specifications.map((specification, specIndex) => (
+                      <>
+                        <div key={specIndex} className="col-12 col-md-6">
+                          <h6 className="text-accent border-bottom pb-2 mb-2">
+                            {specification.heading}
+                          </h6>
+                          <ul className="list-unstyled fs-sm pb-2">
+                            {specification.labels.map((label, labelIndex) => (
+                              <>
+                                <li className="d-flex justify-content-between gap-2">
+                                  <span
+                                    className="text-body-secondary"
+                                    style={{ width: "50%" }}
+                                  >
+                                    {label.label}
+                                  </span>
+                                  <span style={{ width: "50%" }}>
+                                    {label.value}
+                                  </span>
+                                </li>
+                              </>
+                            ))}
+                          </ul>
+                        </div>
+                      </>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -1269,7 +1248,6 @@ alt="Product Image"
                 style={{}}
               >
                 <div className="accordion-body">
-
                   <div>
                     <div className="mb-2">
                       <span className="mb-1 h4 d-block ">
@@ -1290,129 +1268,148 @@ alt="Product Image"
                         </button>
                       )}
 
+                      {isOpenReview && (
+                        <>
+                          <div className="custom-popup ">
+                            <div className="popup-container ">
+                              <button
+                                className="btn btn-danger btn-sm d-flex align-items-center justify-content-center"
+                                type="button"
+                                onClick={toggleReviewPopup}
+                              >
+                                <i className="ri-close-line" />
+                              </button>
 
-                      {isOpenReview && (<>
+                              <div className="card border-0">
+                                <div className="card-body border-0">
+                                  <h4 className="mb-2">Review And Rating</h4>
+                                  <div className="needs-validation">
+                                    <div className="mb-4">
+                                      <label
+                                        className="form-label"
+                                        htmlFor="review-rating"
+                                      >
+                                        How was your experience about our
+                                        product?
+                                      </label>
 
-                        <div className="custom-popup ">
+                                      <div className="d-flex gap-2 ratingbox">
+                                        <input
+                                          type="radio"
+                                          onChange={handleChange}
+                                          name="rating"
+                                          id="rating5"
+                                          defaultValue="5"
+                                          className="d-none"
+                                        />
+                                        <label htmlFor="rating5">
+                                          <i className="ri-star-fill" />{" "}
+                                        </label>
 
-                          <div className="popup-container ">
-                            <button
-                              className="btn btn-danger btn-sm d-flex align-items-center justify-content-center"
-                              type="button" onClick={toggleReviewPopup}
-                            >
-                              <i className="ri-close-line" />
+                                        <input
+                                          type="radio"
+                                          onChange={handleChange}
+                                          name="rating"
+                                          id="rating4"
+                                          defaultValue="4"
+                                          className="d-none"
+                                        />
+                                        <label htmlFor="rating4">
+                                          <i className="ri-star-fill" />{" "}
+                                        </label>
 
-                            </button>
+                                        <input
+                                          type="radio"
+                                          onChange={handleChange}
+                                          name="rating"
+                                          id="rating3"
+                                          defaultValue="3"
+                                          className="d-none"
+                                        />
+                                        <label htmlFor="rating3">
+                                          <i className="ri-star-fill" />{" "}
+                                        </label>
 
-                            <div
-                              className="card border-0"
-                            >
-                              <div className="card-body border-0" >
-                                <h4 className="mb-2">Review And Rating
-                                </h4>
-                                <div className="needs-validation" >
+                                        <input
+                                          type="radio"
+                                          onChange={handleChange}
+                                          name="rating"
+                                          id="rating2"
+                                          defaultValue="2"
+                                          className="d-none"
+                                        />
+                                        <label htmlFor="rating2">
+                                          <i className="ri-star-fill" />{" "}
+                                        </label>
 
-                                  <div className="mb-4">
-                                    <label className="form-label" htmlFor="review-rating">
-                                      How was your experience about our product?
-
-                                    </label>
-
-                                    <div className="d-flex gap-2 ratingbox">
-
-
-
-
-                                      <input type="radio" onChange={handleChange} name="rating" id="rating5" defaultValue="5" className="d-none" />
-                                      <label htmlFor="rating5">
-
-                                        <i className="ri-star-fill" /> </label>
-
-
-                                      <input type="radio" onChange={handleChange} name="rating" id="rating4" defaultValue="4" className="d-none" />
-                                      <label htmlFor="rating4">
-
-                                        <i className="ri-star-fill" /> </label>
-
-                                      <input type="radio" onChange={handleChange} name="rating" id="rating3" defaultValue="3" className="d-none" />
-                                      <label htmlFor="rating3">
-
-                                        <i className="ri-star-fill" /> </label>
-
-
-                                      <input type="radio" onChange={handleChange} name="rating" id="rating2" defaultValue="2" className="d-none" />
-                                      <label htmlFor="rating2">
-
-                                        <i className="ri-star-fill" /> </label>
-
-                                      <input type="radio" onChange={handleChange} name="rating" id="rating1" defaultValue="1" className="d-none" />
-                                      <label htmlFor="rating1">
-
-                                        <i className="ri-star-fill" /> </label>
-
-
-
+                                        <input
+                                          type="radio"
+                                          onChange={handleChange}
+                                          name="rating"
+                                          id="rating1"
+                                          defaultValue="1"
+                                          className="d-none"
+                                        />
+                                        <label htmlFor="rating1">
+                                          <i className="ri-star-fill" />{" "}
+                                        </label>
+                                      </div>
+                                    </div>
+                                    <div className="mb-4">
+                                      <label
+                                        className="form-label"
+                                        htmlFor="review-text"
+                                      >
+                                        Review<span>*</span>
+                                      </label>
+                                      <textarea
+                                        className="form-control"
+                                        rows={5}
+                                        maxLength={300}
+                                        name="comment"
+                                        id="review-text"
+                                        value={formData.comment}
+                                        onChange={handleChange}
+                                      />
+                                      <div className="invalid-feedback">
+                                        Please leave your review.
+                                      </div>
                                     </div>
 
-
+                                    {SubmitLoading ? (
+                                      <button
+                                        className="btn btn-primary"
+                                        type="button"
+                                        onClick={submitData}
+                                      >
+                                        Add Review
+                                      </button>
+                                    ) : (
+                                      <button
+                                        class="btn btn-secondary btn-sm"
+                                        type="button"
+                                        disabled
+                                      >
+                                        <span class="ms-1">Loading...</span>
+                                        <span
+                                          class="spinner-border spinner-border-sm"
+                                          role="status"
+                                          aria-hidden="true"
+                                        ></span>
+                                      </button>
+                                    )}
                                   </div>
-                                  <div className="mb-4">
-                                    <label className="form-label" htmlFor="review-text">
-                                      Review<span>*</span>
-                                    </label>
-                                    <textarea
-                                      className="form-control"
-                                      rows={5}
-                                      maxLength={300}
-                                      name="comment"
-                                      id="review-text"
-                                      value={formData.comment} onChange={handleChange}
-                                    />
-                                    <div className="invalid-feedback">Please leave your review.</div>
-                                  </div>
-
-                                  {SubmitLoading ? (
-                                    <button
-                                      className="btn btn-primary"
-                                      type="button"
-                                      onClick={submitData}
-                                    >
-                                      Add Review
-                                    </button>
-                                  ) : (
-                                    <button
-                                      class="btn btn-secondary btn-sm"
-                                      type="button"
-                                      disabled
-                                    >
-                                      <span class="ms-1">Loading...</span>
-                                      <span
-                                        class="spinner-border spinner-border-sm"
-                                        role="status"
-                                        aria-hidden="true"
-                                      ></span>
-                                    </button>
-                                  )}
-
                                 </div>
                               </div>
                             </div>
-
                           </div>
-
-                        </div>
-
-                      </>)}
-
-
+                        </>
+                      )}
                     </div>
 
                     <hr />
 
-                    <span className="mb-3 h4 d-block ">
-                      Customer Reviews
-                    </span>
-
+                    <span className="mb-3 h4 d-block ">Customer Reviews</span>
                   </div>
                   <div className="row g-4 g-md-10">
                     <div className="col-12">
@@ -1424,12 +1421,15 @@ alt="Product Image"
                             <div className="card-body">
                               <div className="row g-0">
                                 <div className="col-auto">
-                                  <span className="blog-article-meta-link"  >
+                                  <span className="blog-article-meta-link">
                                     <div className="avatar">
                                       <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 64 64"
-                                        style={{ isolation: "isolate", transform: "scale(0.6)" }}
+                                        style={{
+                                          isolation: "isolate",
+                                          transform: "scale(0.6)",
+                                        }}
                                       >
                                         <defs>
                                           <clipPath id="a">
@@ -1440,18 +1440,25 @@ alt="Product Image"
                                           <path d="M19.247 18.468C17.383 11.511 21.584 4.331 28.622 2.445 35.66.559 42.888 4.677 44.753 11.634 46.617 18.592 42.416 25.772 35.378 27.658 28.34 29.544 21.112 25.426 19.247 18.468zM44.003 31.262C53.176 33.928 61.012 43.833 61.012 55.553L61.012 58.776C61.012 60.556 59.567 62 57.788 62L6.212 62C4.433 62 2.988 60.556 2.988 58.776L2.988 55.553C2.988 43.833 10.824 33.928 19.997 31.262 20.851 31.014 21.986 31.384 22.53 32.088 23.946 33.922 27.739 35.922 32 35.922 36.261 35.922 40.054 33.922 41.47 32.088 42.014 31.384 43.149 31.014 44.003 31.262z" />
                                         </g>
                                       </svg>
-
                                     </div>
                                   </span>
                                 </div>
                                 <div className="col">
                                   <h6 className="mb-0 fs-base text-capitalize">
-                                    {rating.username || ''}
+                                    {rating.username || ""}
                                   </h6>
-                                  <span className={`star-rating star-${rating.rating * 2 || ''}`} />{" "}
-                                  <span className="ms-2"> {formatDate(rating.createdAt)} </span> {/* Assuming you have a function formatDate() to format date */}
+                                  <span
+                                    className={`star-rating star-${
+                                      rating.rating * 2 || ""
+                                    }`}
+                                  />{" "}
+                                  <span className="ms-2">
+                                    {" "}
+                                    {formatDate(rating.createdAt)}{" "}
+                                  </span>{" "}
+                                  {/* Assuming you have a function formatDate() to format date */}
                                   <p className="fs-md mb-2">
-                                    {rating.comment || ''}
+                                    {rating.comment || ""}
                                   </p>
                                 </div>
                               </div>
@@ -1459,8 +1466,6 @@ alt="Product Image"
                           </div>
                         ))
                       )}
-
-
                     </div>
                   </div>
                 </div>
@@ -1469,9 +1474,6 @@ alt="Product Image"
           </div>
         </div>
         {/* Product Description */}
-
-
-
 
         {/* Product Cards */}
         <div className="container pb-4 pb-lg-10">
@@ -1492,157 +1494,154 @@ alt="Product Image"
           {/* Product Cards */}
           <div className="row pt-2 mx-n2 hero-swiper hide-desk-arrow">
             {/* Product Card */}
-            <Swiper breakpoints={{
-              300: {
-                slidesPerView: 2,
-                spaceBetween: 10, // Set the gap between slides for window width <= 400px
-              },
-              768: {
-                slidesPerView: 2,
-                spaceBetween: 20, // Set the gap between slides for window width <= 768px
-              },
-              992: {
-                slidesPerView: 4,
-                spaceBetween: 25, // Set the gap between slides for window width <= 992px
-              },
-              1200: {
-                slidesPerView: 6,
-                spaceBetween: 20, // Set the gap between slides for window width <= 1200px
-              },
-            }}
-              pagination={true} modules={[Pagination, Navigation]} className="swiper-wrapper" >
+            <Swiper
+              breakpoints={{
+                300: {
+                  slidesPerView: 2,
+                  spaceBetween: 10, // Set the gap between slides for window width <= 400px
+                },
+                768: {
+                  slidesPerView: 2,
+                  spaceBetween: 20, // Set the gap between slides for window width <= 768px
+                },
+                992: {
+                  slidesPerView: 4,
+                  spaceBetween: 25, // Set the gap between slides for window width <= 992px
+                },
+                1200: {
+                  slidesPerView: 6,
+                  spaceBetween: 20, // Set the gap between slides for window width <= 1200px
+                },
+              }}
+              pagination={true}
+              modules={[Pagination, Navigation]}
+              className="swiper-wrapper"
+            >
+              {isProducts
+                ? Array.from({ length: 7 }).map((_, index) => (
+                    <SwiperSlide key={index}>
+                      <div
+                        className="card-1 skeleton"
+                        style={{ height: 371, borderRadius: 10 }}
+                      ></div>
+                    </SwiperSlide>
+                  ))
+                : layout.trending_product && (
+                    <>
+                      {Products.map((product, index) => {
+                        const productRatings = ratings.filter(
+                          (rating) => rating.productId === product._id
+                        );
+                        const totalRatings = productRatings.length;
+                        const totalRatingValue = productRatings.reduce(
+                          (acc, curr) => acc + curr.rating,
+                          0
+                        );
+                        const averageRating =
+                          totalRatings > 0
+                            ? totalRatingValue / totalRatings
+                            : 0;
+                        return (
+                          layout.trending_product.includes(product._id) && (
+                            <>
+                              <SwiperSlide key={index}>
+                                <div className="card card-product h-100">
+                                  {/* Badges */}
+                                  <div className="product-badges">
+                                    <span className="badge bg-danger">12%</span>
+                                    <span className="badge bg-success">
+                                      Top
+                                    </span>
+                                  </div>
+                                  {/* Badges */}
+                                  {/* Buttons */}
+                                  <div className="product-buttons">
+                                    <button
+                                      className="btn-product btn-wishlist"
+                                      type="button"
+                                      data-bs-toggle="button"
+                                      title="Add to wishlist"
+                                    >
+                                      <i className="ri-heart-line" />
+                                    </button>
+                                    <a
+                                      className="btn-product btn-compare"
+                                      href="#"
+                                      title="Compare product"
+                                    >
+                                      <i className="ri-repeat-line" />
+                                    </a>
+                                    <a
+                                      className="btn-product btn-view"
+                                      href="#modal-quick-view"
+                                      data-bs-toggle="modal"
+                                      title="Quick preview"
+                                    >
+                                      <i className="ri-eye-line" />
+                                    </a>
+                                  </div>
+                                  {/* Buttons */}
+                                  {/* Preview Image */}
+                                  <Link
+                                    className="card-img-top d-block overflow-hidden flex-shrink-0"
+                                    to={`/product/${product._id}`}
+                                  >
+                                    <img
+                                      className="img-fluid"
+                                      src={product.pImage}
+                                      alt={` ${product.title} Product Image`}
+                                    />
+                                  </Link>
+                                  {/* Preview Image */}
+                                  <div className="card-body d-flex flex-column align-items-start flex-grow-1 rounded-bottom h-100 py-3">
+                                    {/* Product Category */}
 
+                                    {/* Product Category */}
+                                    {/* Product Title */}
+                                    <h3 className="product-title flex-grow-1">
+                                      <Link to={`/product/${product._id}`}>
+                                        {" "}
+                                        {product.title}{" "}
+                                      </Link>
+                                    </h3>
+                                    {/* Product Title */}
+                                    {/* Star Rating */}
+                                    {/* <span className={`star-rating star-${Math.round(averageRating) * 2}`} /> */}
 
+                                    {/* Star Rating */}
+                                    {/* Product Price */}
+                                    <div className="product-price">
+                                      <span className="text-danger fs-5">
+                                        ₹{product.salePrice}
+                                        <del className="text-body-secondary ms-1">
+                                          <small>
+                                            ₹{product.regularPrice}{" "}
+                                          </small>
+                                        </del>
+                                      </span>
+                                    </div>
+                                    {/* Product Price */}
+                                    {/* Product Meta */}
 
-              {isProducts ? (Array.from({ length: 7 }).map((_, index) => (
-                <SwiperSlide key={index} >
-                  <div
-                    className="card-1 skeleton"
-                    style={{ height: 371, borderRadius: 10 }}
-                  ></div>
+                                    {/* Product Meta */}
+                                  </div>
+                                  {/* Product Addon */}
 
-                </SwiperSlide>
-              ))
-              ) : (layout.trending_product && (
-                <>
-                  {Products.map((product, index) => {
-
-                    const productRatings = ratings.filter(rating => rating.productId === product._id);
-                    const totalRatings = productRatings.length;
-                    const totalRatingValue = productRatings.reduce((acc, curr) => acc + curr.rating, 0);
-                    const averageRating = totalRatings > 0 ? totalRatingValue / totalRatings : 0;
-                    return (
-
-                      layout.trending_product.includes(product._id) && (<>
-
-                        <SwiperSlide key={index}>
-
-                          <div className="card card-product h-100">
-                            {/* Badges */}
-                            <div className="product-badges">
-                              <span className="badge bg-danger">12%</span>
-                              <span className="badge bg-success">Top</span>
-                            </div>
-                            {/* Badges */}
-                            {/* Buttons */}
-                            <div className="product-buttons">
-                              <button
-                                className="btn-product btn-wishlist"
-                                type="button"
-                                data-bs-toggle="button"
-                                title="Add to wishlist"
-                              >
-                                <i className="ri-heart-line" />
-                              </button>
-                              <a
-                                className="btn-product btn-compare"
-                                href="#"
-                                title="Compare product"
-                              >
-                                <i className="ri-repeat-line" />
-                              </a>
-                              <a
-                                className="btn-product btn-view"
-                                href="#modal-quick-view"
-                                data-bs-toggle="modal"
-                                title="Quick preview"
-                              >
-                                <i className="ri-eye-line" />
-                              </a>
-                            </div>
-                            {/* Buttons */}
-                            {/* Preview Image */}
-                            <Link
-                              className="card-img-top d-block overflow-hidden flex-shrink-0"
-                              to={`/product/${product._id}`}
-                            >
-                              <img
-                                className="img-fluid"
-                                src={product.pImage}
-                                alt={` ${product.title} Product Image`}
-                              />
-                            </Link>
-                            {/* Preview Image */}
-                            <div className="card-body d-flex flex-column align-items-start flex-grow-1 rounded-bottom h-100 py-3">
-                              {/* Product Category */}
-
-                              {/* Product Category */}
-                              {/* Product Title */}
-                              <h3 className="product-title flex-grow-1">
-                                <Link to={`/product/${product._id}`} > {product.title} </Link>
-                              </h3>
-                              {/* Product Title */}
-                              {/* Star Rating */}
-                              {/* <span className={`star-rating star-${Math.round(averageRating) * 2}`} /> */}
-
-                              {/* Star Rating */}
-                              {/* Product Price */}
-                              <div className="product-price">
-                                <span className="text-danger fs-5">
-                                  ₹{product.salePrice}
-                                  <del className="text-body-secondary ms-1">
-                                    <small>₹{product.regularPrice} </small>
-                                  </del>
-                                </span>
-                              </div>
-                              {/* Product Price */}
-                              {/* Product Meta */}
-
-                              {/* Product Meta */}
-                            </div>
-                            {/* Product Addon */}
-
-                            {/* Product Addon */}
-                          </div>
-                          {/* Product Cards */}
-
-                        </SwiperSlide>
-
-                      </>)
-                    )
-
-
-                  })}
-
-
-
-
-                </>
-              )
-              )}
-
-
-
-
-            </Swiper >
-
+                                  {/* Product Addon */}
+                                </div>
+                                {/* Product Cards */}
+                              </SwiperSlide>
+                            </>
+                          )
+                        );
+                      })}
+                    </>
+                  )}
+            </Swiper>
           </div>
           {/* Product Cards */}
         </div>
         {/* Product Cards */}
-
-
-
       </div>
 
       <Footer />

@@ -6,7 +6,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
-import axiosInstance from '../../axiosInstance';
+import axiosInstance from "../../axiosInstance";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
@@ -18,8 +18,6 @@ import RangeSlider from "../components/extra/RangeSlider";
 import { Helmet } from "react-helmet";
 
 const Category = () => {
-
-
   const [layout, setLayout] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -27,7 +25,6 @@ const Category = () => {
   const [isProducts, setIsProducts] = useState(true);
 
   const [RProducts, setRProducts] = useState([]);
-
 
   const getProducts = async () => {
     try {
@@ -45,8 +42,7 @@ const Category = () => {
       const { data } = await axiosInstance.get(`/home-layout-data`);
       setLayout(data.homeLayout);
       setIsLoading(false); // Set loading state to false in case of an error
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       toast.error("Error fetching Home layout!");
       setIsLoading(false); // Set loading state to false in case of an error
@@ -57,10 +53,6 @@ const Category = () => {
     getData();
     getProducts();
   }, []);
-
-
-
-
 
   const startMin = 0;
   const startMax = 100;
@@ -81,16 +73,13 @@ const Category = () => {
 
   const [Pro, setPro] = useState([]);
   const [Attr, setAttr] = useState([]);
-  const [fillter, setfillter] = useState('');
+  const [fillter, setfillter] = useState("");
 
   const [Viewfillter, setViewfillter] = useState([]);
 
-
   const [isCat, setIsCat] = useState(true);
-  const [count, setcount] = useState('100');
+  const [count, setcount] = useState("100");
   const [Sidebar, setIsSidebar] = useState(false);
-
-
 
   const handlecountChange = (event) => {
     setcount(event.target.value);
@@ -100,40 +89,41 @@ const Category = () => {
   const [products, setProducts] = useState([]);
   const [ratings, setRatings] = useState([]);
 
-
   const getRating = async () => {
     try {
       const { data } = await axiosInstance.get(`/all-rating`);
       setRatings(data.ratings);
       // console.log('getRating', data)
-
     } catch (error) {
       console.error("Error fetching rating:", error);
     }
   };
 
   const getCategory = async (fillter, page, price) => {
-    setIsSidebar(false)
+    setIsSidebar(false);
     try {
       window.scrollTo(0, 0);
       setIsCat(true);
       const encodedFilter = encodeURIComponent(fillter); // Encode the filter string
 
-      const { data } = await axiosInstance.get(`/all/category/${id}?filter=${encodedFilter}&price=${price}&page=${page}&perPage=${count}`);
+      const { data } = await axiosInstance.get(
+        `/all/category/${id}?filter=${encodedFilter}&price=${price}&page=${page}&perPage=${count}`
+      );
+
       setCat([]);
       setTCat("");
-      setMCat([])
+      setMCat([]);
       if (data?.success) {
         setCat(data?.categories);
         setTCat(data.MainCat.title);
-        setTCatImage(data.MainCat.image)
+        setTCatImage(data.MainCat.image);
         setTotalPages(data?.proLength);
         setfillter(fillter);
 
         setProducts(data?.productsFilter);
 
         setPro(data?.products);
-        setMCat(data?.MainCat)
+        setMCat(data?.MainCat);
       }
 
       // console.log('datadatadata', data)
@@ -146,11 +136,11 @@ const Category = () => {
   };
 
   const Opensidebar = async () => {
-    setIsSidebar(true)
-  }
+    setIsSidebar(true);
+  };
   const Closesidebar = async () => {
-    setIsSidebar(false)
-  }
+    setIsSidebar(false);
+  };
 
   const getAttribute = async () => {
     try {
@@ -190,14 +180,6 @@ const Category = () => {
     setCurrentPage(1); // Set current page to 1
   };
 
-
-
-
-
-
-
-
-
   const generateQueryString = () => {
     const filterObj = {};
 
@@ -219,8 +201,10 @@ const Category = () => {
     const filterString = JSON.stringify(filterObj);
 
     // console.log(filterString); // Output the generated filter string
-    setViewfillter(filterString)
-    setTimeout(function () { getCategory(filterString, currentPage, selectedRanges); }, 100);
+    setViewfillter(filterString);
+    setTimeout(function () {
+      getCategory(filterString, currentPage, selectedRanges);
+    }, 100);
   };
 
   // const handleCategoryLinkClick = (categoryId) => {
@@ -236,8 +220,8 @@ const Category = () => {
   }, [id, currentPage, selectedFilters, selectedRanges, count]); // Empty dependency array ensures that the effect runs once after the initial render
 
   useEffect(() => {
-  setSelectedRanges([]);
-}, [id]); // Empty dependency array ensures that the effect runs once after the initial render
+    setSelectedRanges([]);
+  }, [id]); // Empty dependency array ensures that the effect runs once after the initial render
 
   // useEffect(() => {
   //   generateQueryString(); // Call generateQueryString when selectedFilters change
@@ -254,15 +238,14 @@ const Category = () => {
     });
   }
 
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
-
-
   // Calculate the maximum sale price to determine the range
-  const maxSalePrice = Math.max(...products.map(product => product.salePrice));
+  const maxSalePrice = Math.max(
+    ...products.map((product) => product.salePrice)
+  );
 
   // Determine the number of ranges based on the maximum sale price
   const numRanges = Math.ceil(maxSalePrice / 10000);
@@ -274,9 +257,10 @@ const Category = () => {
   }));
 
   // Filter out the price ranges that match the actual sale prices of your products
-  const filteredPriceRanges = priceRanges.filter(range =>
-    products.some(product =>
-      product.salePrice >= range.min && product.salePrice < range.max
+  const filteredPriceRanges = priceRanges.filter((range) =>
+    products.some(
+      (product) =>
+        product.salePrice >= range.min && product.salePrice < range.max
     )
   );
 
@@ -285,7 +269,7 @@ const Category = () => {
     if (checked) {
       setSelectedRanges([...selectedRanges, value]);
     } else {
-      setSelectedRanges(selectedRanges.filter(range => range !== value));
+      setSelectedRanges(selectedRanges.filter((range) => range !== value));
     }
     setCurrentPage(1);
     // console.log(selectedRanges)
@@ -298,9 +282,7 @@ const Category = () => {
       <Header />
 
       <Helmet>
-        {CatM.metaTitle && (
-          <title>{CatM.metaTitle}</title>
-        )}
+        {CatM.metaTitle && <title>{CatM.metaTitle}</title>}
         {CatM.metaDescription && (
           <meta name="description" content={CatM.metaDescription} />
         )}
@@ -308,8 +290,6 @@ const Category = () => {
           <meta name="keywords" content={CatM.metaKeywords} />
         )}
       </Helmet>
-
-
 
       <div className="whitesmoke">
         {/* Page Title */}
@@ -319,7 +299,7 @@ const Category = () => {
         >
           <div className="container d-lg-flex justify-content-between align-items-center py-2 py-lg-4">
             <div className="pe-lg-4 text-center text-lg-start">
-              <h1 className="h3 mb-0">Shop  {CatT ? <>  {CatT}  </> : <> </>} Category </h1>
+              <h1 className="h3 mb-0">{CatT ? <> {CatT} </> : <> </>}</h1>
             </div>
             <div className="pt-2 pt-lg-0">
               <nav aria-label="breadcrumb">
@@ -348,7 +328,9 @@ const Category = () => {
             {/* Sidebar */}
             <div className="col-mg-4 mystickyFillter">
               <div
-                className={`offcanvas offcanvas-collapse offcanvas-start rounded-3 shadow ${Sidebar && 'show'}`}
+                className={`offcanvas offcanvas-collapse offcanvas-start rounded-3 shadow ${
+                  Sidebar && "show"
+                }`}
                 id="category-sidebar"
                 style={{ maxWidth: "23rem" }}
               >
@@ -356,7 +338,8 @@ const Category = () => {
                   <h2 className="h5 mb-0">Filters</h2>
                   <button
                     className="btn-close ms-auto"
-                    type="button" onClick={Closesidebar}
+                    type="button"
+                    onClick={Closesidebar}
                     data-bs-dismiss="offcanvas"
                     aria-label="Close"
                   />
@@ -366,10 +349,6 @@ const Category = () => {
                   <div className="widget widget-categories pb-5 mb-5 ">
                     {/* Price Range Slider */}
                     <div className="widget pb-5 mb-5">
-
-
-
-
                       <h2>Filtered Products</h2>
                       {/* <ul>
           {filteredProducts.map(product => (
@@ -382,12 +361,14 @@ const Category = () => {
         </ul>
  */}
 
-
                       {/* <h3 className="widget-title">Price</h3> */}
-                      {filteredPriceRanges && filteredPriceRanges.length > 0 && <b>Price</b>}
+                      {filteredPriceRanges &&
+                        filteredPriceRanges.length > 0 && <b>Price</b>}
                       <ul className="widget-list pt-1">
                         {filteredPriceRanges.map((range, index) => {
-                          const isChecked = selectedRanges.includes(`${range.min}-${range.max}`);
+                          const isChecked = selectedRanges.includes(
+                            `${range.min}-${range.max}`
+                          );
                           return (
                             <li key={index} className="mb-1">
                               <div className="form-check">
@@ -399,7 +380,10 @@ const Category = () => {
                                   onChange={handleCheckpriceboxChange}
                                   checked={isChecked}
                                 />
-                                <label className="form-check-label" htmlFor={`checkbox-${index}`}>
+                                <label
+                                  className="form-check-label"
+                                  htmlFor={`checkbox-${index}`}
+                                >
                                   ₹{range.min} - ₹{range.max}
                                 </label>
                               </div>
@@ -407,76 +391,61 @@ const Category = () => {
                           );
                         })}
                       </ul>
-
-
                     </div>
                     {/* Price Range Slider */}
                     {/* <h3 className="widget-title">Categories</h3> */}
 
+                    {/* Product category */}
 
-  {/* Product category */}
-
-  {Cat && Cat.length > 0 && (
-  <div className="accordion-item">
-  <h2 className="accordion-header" id="heading1">
-    <button
-      className="accordion-button"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#categories"
-      aria-expanded="flase"
-      aria-controls="categories"
-    >
-
-  Categories
-    </button>
-  </h2>
-  <div
-    id="categories"
-    className="accordion-collapse collapse"
-    aria-labelledby="heading1"
-    style={{}}
-  >
-    <div className="accordion-body">
-      <ul className="widget-list pt-1">
-      {isCat
-                    ? Array.from({ length: 4 }).map((_, index) => (
-                     
-
+                    {Cat && Cat.length > 0 && (
+                      <div className="accordion-item">
+                        <h2 className="accordion-header" id="heading1">
+                          <button
+                            className="accordion-button"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#categories"
+                            aria-expanded="flase"
+                            aria-controls="categories"
+                          >
+                            Categories
+                          </button>
+                        </h2>
                         <div
-                          className="card-1 skeleton mb-2"
-                          style={{ height: 20, borderRadius: 10 }}
-                        ></div>
-               
-                    ))
-                    : Cat.map((Cat) => (
-                      <>
-
-<li className="mb-1">
-<Link to={`/category/${Cat._id}`} className="text-black" >{Cat.title} </Link>
-
-         </li>
-
-
-                      </>
-                    ))}
-
-
-    
-       
-      </ul>
-    </div>
-  </div>
-</div>
-)}
-
-
- 
-
+                          id="categories"
+                          className="accordion-collapse collapse"
+                          aria-labelledby="heading1"
+                          style={{}}
+                        >
+                          <div className="accordion-body">
+                            <ul className="widget-list pt-1">
+                              {isCat
+                                ? Array.from({ length: 4 }).map((_, index) => (
+                                    <div
+                                      className="card-1 skeleton mb-2"
+                                      style={{ height: 20, borderRadius: 10 }}
+                                    ></div>
+                                  ))
+                                : Cat.map((Cat) => (
+                                    <>
+                                      <li className="mb-1">
+                                        <Link
+                                          to={`/category/${Cat._id}`}
+                                          className="text-black"
+                                        >
+                                          {Cat.title}{" "}
+                                        </Link>
+                                      </li>
+                                    </>
+                                  ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
                     {Attr.map((attr, index) => {
                       let hasVariations = false;
-
 
                       const checkVariationsExist = () => {
                         // for (const product of products) {
@@ -488,14 +457,13 @@ const Category = () => {
                       };
 
                       if (checkVariationsExist()) {
-                        hasVariations = products.some(product => product?.variations[attr.name]);
-
+                        hasVariations = products.some(
+                          (product) => product?.variations[attr.name]
+                        );
                       }
 
                       if (hasVariations) {
                         return (
-
-
                           <div className="accordion-item" key={attr._id}>
                             <h2
                               className="accordion-header"
@@ -512,13 +480,24 @@ const Category = () => {
                                 {attr.name}
                               </button>
                             </h2>
-                            {attr.name === 'Color' ? (
+                            {attr.name === "Color" ? (
                               <>
                                 <div className="color-options">
                                   {products.map((product, idx) => {
-                                    if (product.variations[attr.name] && !addedVariations.has(product.variations[attr.name][0][attr.name])) {
+                                    if (
+                                      product.variations[attr.name] &&
+                                      !addedVariations.has(
+                                        product.variations[attr.name][0][
+                                          attr.name
+                                        ]
+                                      )
+                                    ) {
                                       // Add the variation to the set
-                                      addedVariations.add(product.variations[attr.name][0][attr.name]);
+                                      addedVariations.add(
+                                        product.variations[attr.name][0][
+                                          attr.name
+                                        ]
+                                      );
 
                                       return (
                                         <label key={index}>
@@ -527,10 +506,21 @@ const Category = () => {
                                             style={{ display: "none" }}
                                             name="color"
                                             id={`checkbox-${idx}-${attr._id}`}
-                                            value={`${attr.name},${product.variations[attr.name][0][attr.name]}`}
+                                            value={`${attr.name},${
+                                              product.variations[attr.name][0][
+                                                attr.name
+                                              ]
+                                            }`}
                                             onChange={handleCheckboxChange}
-                                            checked={selectedFilters[`${attr.name},${product.variations[attr.name][0][attr.name]}`]}
-
+                                            checked={
+                                              selectedFilters[
+                                                `${attr.name},${
+                                                  product.variations[
+                                                    attr.name
+                                                  ][0][attr.name]
+                                                }`
+                                              ]
+                                            }
                                           />
                                           <span
                                             className="color-circle"
@@ -538,7 +528,14 @@ const Category = () => {
                                               backgroundColor: `${attr.color[index]}`,
                                             }}
                                           ></span>
-                                          <span className="hovercolor">  {product.variations[attr.name][0][attr.name]} </span>
+                                          <span className="hovercolor">
+                                            {" "}
+                                            {
+                                              product.variations[attr.name][0][
+                                                attr.name
+                                              ]
+                                            }{" "}
+                                          </span>
                                         </label>
                                       );
                                     }
@@ -553,9 +550,20 @@ const Category = () => {
                                   <div className="accordion-body">
                                     <ul className="widget-list pt-1">
                                       {products.map((product, idx) => {
-                                        if (product.variations[attr.name] && !addedVariations.has(product.variations[attr.name][0][attr.name])) {
+                                        if (
+                                          product.variations[attr.name] &&
+                                          !addedVariations.has(
+                                            product.variations[attr.name][0][
+                                              attr.name
+                                            ]
+                                          )
+                                        ) {
                                           // Add the variation to the set
-                                          addedVariations.add(product.variations[attr.name][0][attr.name]);
+                                          addedVariations.add(
+                                            product.variations[attr.name][0][
+                                              attr.name
+                                            ]
+                                          );
 
                                           return (
                                             <li className="mb-1" key={idx}>
@@ -564,15 +572,33 @@ const Category = () => {
                                                   className="form-check-input"
                                                   type="checkbox"
                                                   id={`checkbox-${idx}-${attr._id}`}
-                                                  value={`${attr.name},${product.variations[attr.name][0][attr.name]}`}
-                                                  onChange={handleCheckboxChange}
-                                                  checked={selectedFilters[`${attr.name},${product.variations[attr.name][0][attr.name]}`]}
+                                                  value={`${attr.name},${
+                                                    product.variations[
+                                                      attr.name
+                                                    ][0][attr.name]
+                                                  }`}
+                                                  onChange={
+                                                    handleCheckboxChange
+                                                  }
+                                                  checked={
+                                                    selectedFilters[
+                                                      `${attr.name},${
+                                                        product.variations[
+                                                          attr.name
+                                                        ][0][attr.name]
+                                                      }`
+                                                    ]
+                                                  }
                                                 />
                                                 <label
                                                   className="form-check-label"
                                                   htmlFor={`checkbox-${idx}-${attr._id}`}
                                                 >
-                                                  {product.variations[attr.name][0][attr.name]}
+                                                  {
+                                                    product.variations[
+                                                      attr.name
+                                                    ][0][attr.name]
+                                                  }
                                                 </label>
                                               </div>
                                             </li>
@@ -582,9 +608,7 @@ const Category = () => {
                                     </ul>
                                   </div>
                                 </div>
-
                               </>
-
                             ) : (
                               <div
                                 id={`collapse${index + 1}`}
@@ -594,9 +618,20 @@ const Category = () => {
                                 <div className="accordion-body">
                                   <ul className="widget-list pt-1">
                                     {products.map((product, idx) => {
-                                      if (product.variations[attr.name] && !addedVariations.has(product.variations[attr.name][0][attr.name])) {
+                                      if (
+                                        product.variations[attr.name] &&
+                                        !addedVariations.has(
+                                          product.variations[attr.name][0][
+                                            attr.name
+                                          ]
+                                        )
+                                      ) {
                                         // Add the variation to the set
-                                        addedVariations.add(product.variations[attr.name][0][attr.name]);
+                                        addedVariations.add(
+                                          product.variations[attr.name][0][
+                                            attr.name
+                                          ]
+                                        );
 
                                         return (
                                           <li className="mb-1" key={idx}>
@@ -605,15 +640,31 @@ const Category = () => {
                                                 className="form-check-input"
                                                 type="checkbox"
                                                 id={`checkbox-${idx}-${attr._id}`}
-                                                value={`${attr.name},${product.variations[attr.name][0][attr.name]}`}
+                                                value={`${attr.name},${
+                                                  product.variations[
+                                                    attr.name
+                                                  ][0][attr.name]
+                                                }`}
                                                 onChange={handleCheckboxChange}
-                                                checked={selectedFilters[`${attr.name},${product.variations[attr.name][0][attr.name]}`]}
+                                                checked={
+                                                  selectedFilters[
+                                                    `${attr.name},${
+                                                      product.variations[
+                                                        attr.name
+                                                      ][0][attr.name]
+                                                    }`
+                                                  ]
+                                                }
                                               />
                                               <label
                                                 className="form-check-label"
                                                 htmlFor={`checkbox-${idx}-${attr._id}`}
                                               >
-                                                {product.variations[attr.name][0][attr.name]}
+                                                {
+                                                  product.variations[
+                                                    attr.name
+                                                  ][0][attr.name]
+                                                }
                                               </label>
                                             </div>
                                           </li>
@@ -623,19 +674,12 @@ const Category = () => {
                                   </ul>
                                 </div>
                               </div>
-                            )
-                            }
-
-                          </div >
-
-
-                        )
-
+                            )}
+                          </div>
+                        );
                       }
                     })}
-
-
-                  </div >
+                  </div>
                   {/* Categories */}
                 </div>
               </div>
@@ -643,12 +687,22 @@ const Category = () => {
             {/* Sidebar */}
             {/* Content */}
 
-            <aside className="col-md-8" style={{ flex: 1 }} >
-            {CatImage !== undefined && CatImage !== '' ? (<>
-            <img src={CatImage} width={'100%'} className="rounded" style={{ aspectRatio: "5/1", objectFit: "cover" }} />
-            </>) :(
-                     <div className=" skeleton w-100"   style={{ aspectRatio: "5/1", objectFit: "cover" }} />
-            )}
+            <aside className="col-md-8" style={{ flex: 1 }}>
+              {CatImage !== undefined && CatImage !== "" ? (
+                <>
+                  <img
+                    src={CatImage}
+                    width={"100%"}
+                    className="rounded"
+                    style={{ aspectRatio: "5/1", objectFit: "cover" }}
+                  />
+                </>
+              ) : (
+                <div
+                  className=" skeleton w-100"
+                  style={{ aspectRatio: "5/1", objectFit: "cover" }}
+                />
+              )}
               {/* Recommended Products Slider */}
               {/* Toolbar */}
               <div
@@ -667,14 +721,18 @@ const Category = () => {
                             No of products
                           </label>
                           <div className="col-auto">
-                            <select className="form-select" id="sorting" value={count} onChange={handlecountChange} >
+                            <select
+                              className="form-select"
+                              id="sorting"
+                              value={count}
+                              onChange={handlecountChange}
+                            >
                               <option value="50">50</option>
                               <option value="100">100</option>
 
                               <option value="200">200</option>
 
                               <option value="500">500</option>
-
                             </select>
                           </div>
                         </div>
@@ -686,7 +744,8 @@ const Category = () => {
                       role="tablist"
                     >
                       <li className="nav-item d-lg-none" role="presentation">
-                        <button onClick={Opensidebar}
+                        <button
+                          onClick={Opensidebar}
                           className="nav-link active py-2 px-3"
                           id="pills-home-tab"
                           data-bs-toggle="pill"
@@ -696,7 +755,7 @@ const Category = () => {
                           aria-controls="pills-home"
                           aria-selected="true"
                         >
-                          Fillter {' '}<i className="ri-function-line fs-5 ms-2" />
+                          Fillter <i className="ri-function-line fs-5 ms-2" />
                         </button>
                       </li>
 
@@ -714,7 +773,6 @@ const Category = () => {
                           <i className="ri-list-check fs-5" />
                         </button>
                       </li> */}
-
                     </ul>
                   </div>
                 </div>
@@ -725,17 +783,21 @@ const Category = () => {
                   {(() => {
                     try {
                       const parsedFilters = JSON.parse(Viewfillter);
-                      return Object.entries(parsedFilters).map(([key, value]) => (
-                        <span key={key} className="w-100">
-
-                          {value.split(',').map(val => (
-                            <button onClick={() => removeFilter({ key, val })}
-                              className="btn btn-sm btn-secondary py-1 px-2 ms-1 mb-2" key={`${key}-${val}`}>
-                              {`${key}: ${val}`}  <i class="ri-close-line"></i>
-                            </button >
-                          ))}
-                        </span >
-                      ));
+                      return Object.entries(parsedFilters).map(
+                        ([key, value]) => (
+                          <span key={key} className="w-100">
+                            {value.split(",").map((val) => (
+                              <button
+                                onClick={() => removeFilter({ key, val })}
+                                className="btn btn-sm btn-secondary py-1 px-2 ms-1 mb-2"
+                                key={`${key}-${val}`}
+                              >
+                                {`${key}: ${val}`} <i class="ri-close-line"></i>
+                              </button>
+                            ))}
+                          </span>
+                        )
+                      );
                     } catch (error) {
                       console.error("Error parsing Viewfillter:", error);
                       return <div>No filters Found</div>;
@@ -744,12 +806,10 @@ const Category = () => {
                 </div>
               )}
 
-
-           
               {/* <h2 className="h3 border-bottom pb-4 mb-4">
                 Results for   {CatT ? <>  {CatT}  </> : <> loading.. </>}
               </h2> */}
-              
+
               {/* Heading */}
               <div className="tab-content" id="pills-tabContent">
                 {/* Product Grid */}
@@ -763,115 +823,126 @@ const Category = () => {
                   <div className="row pt-2 mx-n2 mb-4 mb-sm-8">
                     {isCat
                       ? Array.from({ length: 6 }).map((_, index) => (
-                        <div
-                          key={index}
-                          className="col-lg-4 col-md-4 col-sm-6 mt-4"
-                        >
                           <div
-                            className="card-1 skeleton"
-                            style={{ height: 430, borderRadius: 5 }}
-                          ></div>
-                        </div>
-                      ))
+                            key={index}
+                            className="col-lg-4 col-md-4 col-sm-6 mt-4"
+                          >
+                            <div
+                              className="card-1 skeleton"
+                              style={{ height: 430, borderRadius: 5 }}
+                            ></div>
+                          </div>
+                        ))
                       : Pro.map((Pro) => {
-                        // Calculate average rating for the current product
-                        const productRatings = ratings.filter(rating => rating.productId === Pro._id);
-                        const totalRatings = productRatings.length;
-                        const totalRatingValue = productRatings.reduce((acc, curr) => acc + curr.rating, 0);
-                        const averageRating = totalRatings > 0 ? totalRatingValue / totalRatings : 0;
+                          // Calculate average rating for the current product
+                          const productRatings = ratings.filter(
+                            (rating) => rating.productId === Pro._id
+                          );
+                          const totalRatings = productRatings.length;
+                          const totalRatingValue = productRatings.reduce(
+                            (acc, curr) => acc + curr.rating,
+                            0
+                          );
+                          const averageRating =
+                            totalRatings > 0
+                              ? totalRatingValue / totalRatings
+                              : 0;
 
-                        return (
-                          <>
-                            {/* Product */}
-                            <div className="col-sm-6 col-6 col-md-4 px-2 mb-4">
-                              <div className="card card-product h-100">
-                                {/* Badges */}
-                                <div className="product-badges">
-                                  <span className="badge bg-danger">12%</span>
-                                  <span className="badge bg-success">Top</span>
-                                </div>
-                                {/* Badges */}
-                                {/* Buttons */}
-                                <div className="product-buttons">
-                                  <button
-                                    className="btn-product btn-wishlist"
-                                    type="button"
-                                    data-bs-toggle="button"
-                                    title="Add to wishlist"
-                                  >
-                                    <i className="ri-heart-line" />
-                                  </button>
+                          return (
+                            <>
+                              {/* Product */}
+                              <div className="col-sm-6 col-6 col-md-4 px-2 mb-4">
+                                <div className="card card-product h-100">
+                                  {/* Badges */}
+                                  <div className="product-badges">
+                                    <span className="badge bg-danger">12%</span>
+                                    <span className="badge bg-success">
+                                      Top
+                                    </span>
+                                  </div>
+                                  {/* Badges */}
+                                  {/* Buttons */}
+                                  <div className="product-buttons">
+                                    <button
+                                      className="btn-product btn-wishlist"
+                                      type="button"
+                                      data-bs-toggle="button"
+                                      title="Add to wishlist"
+                                    >
+                                      <i className="ri-heart-line" />
+                                    </button>
+                                    <Link
+                                      className="btn-product btn-compare"
+                                      href="#"
+                                      title="Compare product"
+                                    >
+                                      <i className="ri-repeat-line" />
+                                    </Link>
+                                  </div>
+                                  {/* Buttons */}
+                                  {/* Preview Image */}
                                   <Link
-                                    className="btn-product btn-compare"
-                                    href="#"
-                                    title="Compare product"
+                                    to={`/product/${Pro._id}`}
+                                    className="card-img-top d-block overflow-hidden flex-shrink-0"
                                   >
-                                    <i className="ri-repeat-line" />
+                                    <img
+                                      className="img-fluid"
+                                      src={Pro.pImage}
+                                      alt="Product"
+                                    />
                                   </Link>
-                                </div>
-                                {/* Buttons */}
-                                {/* Preview Image */}
-                                <Link
-                                  to={`/product/${Pro._id}`}
-                                  className="card-img-top d-block overflow-hidden flex-shrink-0"
-                                >
-                                  <img
-                                    className="img-fluid"
-                                    src={Pro.pImage}
-                                    alt="Product"
-                                  />
-                                </Link>
-                                {/* Preview Image */}
-                                <div className="card-body d-flex flex-column align-items-start flex-grow-1 h-100 py-3">
-                                  {/* Product Category */}
+                                  {/* Preview Image */}
+                                  <div className="card-body d-flex flex-column align-items-start flex-grow-1 h-100 py-3">
+                                    {/* Product Category */}
 
-
-
-                                  {/* <a
+                                    {/* <a
                                     className="product-category d-block fs-sm pb-1"
                                     href="#"
                                   >
                                     Smartphones
                                   </a> */}
 
-                                  {/* Product Category */}
-                                  {/* Product Title */}
-                                  <h3 className="product-title flex-grow-1">
-                                    <Link to={`/product/${Pro._id}`}>
-                                      {" "}
-                                      {Pro.title}{" "}
-                                    </Link>
-                                  </h3>
+                                    {/* Product Category */}
+                                    {/* Product Title */}
+                                    <h3 className="product-title flex-grow-1">
+                                      <Link to={`/product/${Pro._id}`}>
+                                        {" "}
+                                        {Pro.title}{" "}
+                                      </Link>
+                                    </h3>
 
-                                  {/* Product Title */}
-                                  {/* Star Rating */}
-                                  <span className={`star-rating star-${Math.round(averageRating) * 2}`} />
+                                    {/* Product Title */}
+                                    {/* Star Rating */}
+                                    <span
+                                      className={`star-rating star-${
+                                        Math.round(averageRating) * 2
+                                      }`}
+                                    />
 
+                                    {/* Star Rating */}
+                                    {/* Product Price */}
+                                    <div className="product-price">
+                                      <span className="text-danger fs-5">
+                                        ₹{Pro.salePrice}
+                                        <del className="text-body-secondary ms-1">
+                                          <small>₹{Pro.regularPrice}</small>
+                                        </del>
+                                      </span>
+                                    </div>
+                                    {/* Product Price */}
+                                    {/* Product Meta */}
 
-                                  {/* Star Rating */}
-                                  {/* Product Price */}
-                                  <div className="product-price">
-                                    <span className="text-danger fs-5">
-                                      ₹{Pro.salePrice}
-                                      <del className="text-body-secondary ms-1">
-                                        <small>₹{Pro.regularPrice}</small>
-                                      </del>
-                                    </span>
+                                    {/* Product Meta */}
                                   </div>
-                                  {/* Product Price */}
-                                  {/* Product Meta */}
+                                  {/* Product Addon */}
 
-                                  {/* Product Meta */}
+                                  {/* Product Addon */}
                                 </div>
-                                {/* Product Addon */}
-
-                                {/* Product Addon */}
                               </div>
-                            </div>
-                            {/* Product */}
-                          </>
-                        );
-                      })}
+                              {/* Product */}
+                            </>
+                          );
+                        })}
 
                     {Pro.length === 0 && !isCat && (
                       <div
@@ -880,12 +951,11 @@ const Category = () => {
                           height: 193,
                           display: "flex",
                           alignItems: "center",
-                          justifyContent: "center"
+                          justifyContent: "center",
                         }}
                       >
                         <p>No products found for this category.</p>
                       </div>
-
                     )}
 
                     <hr className="d-none d-sm-block" />
@@ -943,12 +1013,20 @@ const Category = () => {
                 </ul>
               </div> */}
 
-
-
                     <div className="d-flex justify-content-between mt-6">
                       <ul className="pagination">
-                        <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                          <button className="page-link" type="button" onClick={() => handlePageChange(currentPage - 1)}><i className="ri-arrow-left-s-line me-1"></i>Prev</button>
+                        <li
+                          className={`page-item ${
+                            currentPage === 1 ? "disabled" : ""
+                          }`}
+                        >
+                          <button
+                            className="page-link"
+                            type="button"
+                            onClick={() => handlePageChange(currentPage - 1)}
+                          >
+                            <i className="ri-arrow-left-s-line me-1"></i>Prev
+                          </button>
                         </li>
                       </ul>
                       {/* <ul className="pagination">
@@ -959,12 +1037,22 @@ const Category = () => {
           ))}
         </ul> */}
                       <ul className="pagination">
-                        <li className={`page-item ${totalPages === 0 ? 'disabled' : ''}`}>
-                          <button className="page-link" type="button" onClick={() => handlePageChange(currentPage + 1)} aria-label="Next">Next<i className="ms-1 ri-arrow-right-s-line"></i></button>
+                        <li
+                          className={`page-item ${
+                            totalPages === 0 ? "disabled" : ""
+                          }`}
+                        >
+                          <button
+                            className="page-link"
+                            type="button"
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            aria-label="Next"
+                          >
+                            Next<i className="ms-1 ri-arrow-right-s-line"></i>
+                          </button>
                         </li>
                       </ul>
                     </div>
-
 
                     {/* Pagination */}
                   </div>
@@ -1763,35 +1851,29 @@ const Category = () => {
               </div>
             </aside>
             {/* Content */}
-
-
-     
-
-
-
           </div>
 
-
-                 {/* Product Cards */}
-                 <div className="container pb-4 pb-lg-10 mt-5">
-              {/* Heading */}
-              <div className="d-flex flex-wrap justify-content-between align-items-center pt-1 border-bottom pb-4 mb-4">
-                <h2 className="h3 mb-0 me-2">Recommended Products</h2>
-                <div className="ms-n4">
-                  {/* <a
+          {/* Product Cards */}
+          <div className="container pb-4 pb-lg-10 mt-5">
+            {/* Heading */}
+            <div className="d-flex flex-wrap justify-content-between align-items-center pt-1 border-bottom pb-4 mb-4">
+              <h2 className="h3 mb-0 me-2">Recommended Products</h2>
+              <div className="ms-n4">
+                {/* <a
                     className="btn btn-sm btn-link link-info link-hover-primary d-flex align-items-center bg-btn-new"
                     href="#"
                   >
                     View All
                     <i className="ri-arrow-right-line ms-1" />
                   </a> */}
-                </div>
               </div>
-              {/* Heading */}
-              {/* Product Cards */}
-              <div className="row pt-2 mx-n2 hero-swiper hide-desk-arrow">
-                {/* Product Card */}
-                <Swiper breakpoints={{
+            </div>
+            {/* Heading */}
+            {/* Product Cards */}
+            <div className="row pt-2 mx-n2 hero-swiper hide-desk-arrow">
+              {/* Product Card */}
+              <Swiper
+                breakpoints={{
                   300: {
                     slidesPerView: 2,
                     spaceBetween: 10, // Set the gap between slides for window width <= 400px
@@ -1809,147 +1891,145 @@ const Category = () => {
                     spaceBetween: 20, // Set the gap between slides for window width <= 1200px
                   },
                 }}
-                  pagination={true} modules={[Pagination, Navigation]} className="swiper-wrapper" >
+                pagination={true}
+                modules={[Pagination, Navigation]}
+                className="swiper-wrapper"
+              >
+                {isProducts
+                  ? Array.from({ length: 7 }).map((_, index) => (
+                      <SwiperSlide key={index}>
+                        <div
+                          className="card-1 skeleton"
+                          style={{ height: 371, borderRadius: 10 }}
+                        ></div>
+                      </SwiperSlide>
+                    ))
+                  : layout.trending_product && (
+                      <>
+                        {RProducts.map((product, index) => {
+                          const productRatings = ratings.filter(
+                            (rating) => rating.productId === product._id
+                          );
+                          const totalRatings = productRatings.length;
+                          const totalRatingValue = productRatings.reduce(
+                            (acc, curr) => acc + curr.rating,
+                            0
+                          );
+                          const averageRating =
+                            totalRatings > 0
+                              ? totalRatingValue / totalRatings
+                              : 0;
 
+                          return (
+                            layout.trending_product.includes(product._id) && (
+                              <>
+                                <SwiperSlide key={index}>
+                                  <div className="card card-product h-100">
+                                    {/* Badges */}
+                                    <div className="product-badges">
+                                      <span className="badge bg-danger">
+                                        12%
+                                      </span>
+                                      <span className="badge bg-success">
+                                        Top
+                                      </span>
+                                    </div>
+                                    {/* Badges */}
+                                    {/* Buttons */}
+                                    <div className="product-buttons">
+                                      <button
+                                        className="btn-product btn-wishlist"
+                                        type="button"
+                                        data-bs-toggle="button"
+                                        title="Add to wishlist"
+                                      >
+                                        <i className="ri-heart-line" />
+                                      </button>
+                                      <a
+                                        className="btn-product btn-compare"
+                                        href="#"
+                                        title="Compare product"
+                                      >
+                                        <i className="ri-repeat-line" />
+                                      </a>
+                                      <a
+                                        className="btn-product btn-view"
+                                        href="#modal-quick-view"
+                                        data-bs-toggle="modal"
+                                        title="Quick preview"
+                                      >
+                                        <i className="ri-eye-line" />
+                                      </a>
+                                    </div>
+                                    {/* Buttons */}
+                                    {/* Preview Image */}
+                                    <Link
+                                      className="card-img-top d-block overflow-hidden flex-shrink-0"
+                                      to={`/product/${product._id}`}
+                                    >
+                                      <img
+                                        className="img-fluid"
+                                        src={product.pImage}
+                                        alt={` ${product.title} Product Image`}
+                                      />
+                                    </Link>
+                                    {/* Preview Image */}
+                                    <div className="card-body d-flex flex-column align-items-start flex-grow-1 rounded-bottom h-100 py-3">
+                                      {/* Product Category */}
 
+                                      {/* Product Category */}
+                                      {/* Product Title */}
+                                      <h3 className="product-title flex-grow-1">
+                                        <Link to={`/product/${product._id}`}>
+                                          {" "}
+                                          {product.title}{" "}
+                                        </Link>
+                                      </h3>
+                                      {/* Product Title */}
+                                      {/* Star Rating */}
+                                      {/* <span className={`star-rating star-${Math.round(averageRating) * 2}`} /> */}
 
-                  {isProducts ? (Array.from({ length: 7 }).map((_, index) => (
-                    <SwiperSlide key={index} >
-                      <div
-                        className="card-1 skeleton"
-                        style={{ height: 371, borderRadius: 10 }}
-                      ></div>
+                                      {/* Star Rating */}
+                                      {/* Product Price */}
+                                      <div className="product-price">
+                                        <span className="text-danger fs-5">
+                                          ₹{product.salePrice}
+                                          <del className="text-body-secondary ms-1">
+                                            <small>
+                                              ₹{product.regularPrice}{" "}
+                                            </small>
+                                          </del>
+                                        </span>
+                                      </div>
+                                      {/* Product Price */}
+                                      {/* Product Meta */}
+                                      <span className="product-meta text-body-secondary fs-xs d-none">
+                                        {" "}
+                                        Only <span>6</span> left in stock{" "}
+                                      </span>
+                                      {/* Product Meta */}
+                                    </div>
+                                    {/* Product Addon */}
 
-                    </SwiperSlide>
-                  ))
-                  ) : (layout.trending_product && (
-                    <>
-                      {RProducts.map((product, index) => {
-                        const productRatings = ratings.filter(rating => rating.productId === product._id);
-                        const totalRatings = productRatings.length;
-                        const totalRatingValue = productRatings.reduce((acc, curr) => acc + curr.rating, 0);
-                        const averageRating = totalRatings > 0 ? totalRatingValue / totalRatings : 0;
-
-
-                        return (
-
-                          layout.trending_product.includes(product._id) && (<>
-
-                            <SwiperSlide key={index}>
-
-                              <div className="card card-product h-100">
-                                {/* Badges */}
-                                <div className="product-badges">
-                                  <span className="badge bg-danger">12%</span>
-                                  <span className="badge bg-success">Top</span>
-                                </div>
-                                {/* Badges */}
-                                {/* Buttons */}
-                                <div className="product-buttons">
-                                  <button
-                                    className="btn-product btn-wishlist"
-                                    type="button"
-                                    data-bs-toggle="button"
-                                    title="Add to wishlist"
-                                  >
-                                    <i className="ri-heart-line" />
-                                  </button>
-                                  <a
-                                    className="btn-product btn-compare"
-                                    href="#"
-                                    title="Compare product"
-                                  >
-                                    <i className="ri-repeat-line" />
-                                  </a>
-                                  <a
-                                    className="btn-product btn-view"
-                                    href="#modal-quick-view"
-                                    data-bs-toggle="modal"
-                                    title="Quick preview"
-                                  >
-                                    <i className="ri-eye-line" />
-                                  </a>
-                                </div>
-                                {/* Buttons */}
-                                {/* Preview Image */}
-                                <Link
-                                  className="card-img-top d-block overflow-hidden flex-shrink-0"
-                                  to={`/product/${product._id}`}
-                                >
-                                  <img
-                                    className="img-fluid"
-                                    src={product.pImage}
-                                    alt={` ${product.title} Product Image`}
-                                  />
-                                </Link>
-                                {/* Preview Image */}
-                                <div className="card-body d-flex flex-column align-items-start flex-grow-1 rounded-bottom h-100 py-3">
-                                  {/* Product Category */}
-
-                                  {/* Product Category */}
-                                  {/* Product Title */}
-                                  <h3 className="product-title flex-grow-1">
-                                    <Link to={`/product/${product._id}`} > {product.title} </Link>
-                                  </h3>
-                                  {/* Product Title */}
-                                  {/* Star Rating */}
-                                  {/* <span className={`star-rating star-${Math.round(averageRating) * 2}`} /> */}
-
-                                  {/* Star Rating */}
-                                  {/* Product Price */}
-                                  <div className="product-price">
-                                    <span className="text-danger fs-5">
-                                      ₹{product.salePrice}
-                                      <del className="text-body-secondary ms-1">
-                                        <small>₹{product.regularPrice} </small>
-                                      </del>
-                                    </span>
+                                    {/* Product Addon */}
                                   </div>
-                                  {/* Product Price */}
-                                  {/* Product Meta */}
-                                  <span className="product-meta text-body-secondary fs-xs d-none">
-                                    {" "}
-                                    Only <span>6</span> left in stock{" "}
-                                  </span>
-                                  {/* Product Meta */}
-                                </div>
-                                {/* Product Addon */}
-
-                                {/* Product Addon */}
-                              </div>
-                              {/* Product Cards */}
-
-                            </SwiperSlide>
-
-                          </>)
-
-
-                        )
-                      })}
-
-
-
-
-                    </>
-                  )
-                  )}
-
-
-
-
-                </Swiper >
-
-              </div>
-              {/* Product Cards */}
+                                  {/* Product Cards */}
+                                </SwiperSlide>
+                              </>
+                            )
+                          );
+                        })}
+                      </>
+                    )}
+              </Swiper>
             </div>
             {/* Product Cards */}
-
-
+          </div>
+          {/* Product Cards */}
         </div>
 
         {/* Product Category */}
-
-      </div >
+      </div>
 
       <Footer />
     </>

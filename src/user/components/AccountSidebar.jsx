@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import { authActions } from "../../redux/store";
-
 
 const AccountSidebar = () => {
   const dispatch = useDispatch();
@@ -16,29 +15,25 @@ const AccountSidebar = () => {
       toast.success("Logout Successfully");
       navigate("/login");
       // localStorage.clear();
-      localStorage.removeItem('token');
-      localStorage.removeItem('userId');
-      localStorage.removeItem('user');
-
-
+      localStorage.removeItem("token");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("user");
     } catch (error) {
       console.log(error);
     }
   };
 
   const isActive = (path) => {
-    return window.location.pathname === path ? 'active' : '';
+    return window.location.pathname === path ? "active" : "";
   };
 
   return (
     <>
-
-
       <div className="col-lg-3 my-lg-0 my-md-1">
         <div id="sidebar" className="bg-purple">
           <div className="h4 text-white">Account</div>
           <ul>
-            <li className={isActive('/account')} >
+            <li className={isActive("/account")}>
               <Link
                 to="/account"
                 className="text-decoration-none d-flex align-items-start"
@@ -52,10 +47,9 @@ const AccountSidebar = () => {
                 </div>
               </Link>
             </li>
-            <li className={isActive('/account/orders')} >
+            <li className={isActive("/account/orders")}>
               <Link
                 to="/account/orders"
-
                 className="text-decoration-none d-flex align-items-start"
               >
                 <div className="fas fa-box-open pt-2 me-3" />
@@ -68,7 +62,7 @@ const AccountSidebar = () => {
               </Link>
             </li>
 
-            <li className={isActive('/account/profile')} >
+            <li className={isActive("/account/profile")}>
               <Link
                 to="/account/profile"
                 className="text-decoration-none d-flex align-items-start"
@@ -76,12 +70,12 @@ const AccountSidebar = () => {
                 <div className="far fa-address-book pt-2 me-3" />
                 <div className="d-flex flex-column">
                   <div className="link">My Profile</div>
-                  <div className="link-desc">  Change your profile details</div>
+                  <div className="link-desc"> Change your profile details</div>
                 </div>
               </Link>
             </li>
 
-            <li className={isActive('/wishList')} >
+            <li className={isActive("/wishList")}>
               <Link
                 to="/wishList"
                 className="text-decoration-none d-flex align-items-start"
@@ -89,13 +83,12 @@ const AccountSidebar = () => {
                 <div className="far fa-address-book pt-2 me-3" />
                 <div className="d-flex flex-column">
                   <div className="link">My wishlist</div>
-                  <div className="link-desc">  Choose your wishList</div>
+                  <div className="link-desc"> Choose your wishList</div>
                 </div>
               </Link>
             </li>
 
-
-            <li className={isActive('/comparsion')} >
+            <li className={isActive("/comparsion")}>
               <Link
                 to="/comparsion"
                 className="text-decoration-none d-flex align-items-start"
@@ -103,13 +96,15 @@ const AccountSidebar = () => {
                 <div className="far fa-address-book pt-2 me-3" />
                 <div className="d-flex flex-column">
                   <div className="link">My comparsion</div>
-                  <div className="link-desc">  Compare your products details</div>
+                  <div className="link-desc">
+                    {" "}
+                    Compare your products details
+                  </div>
                 </div>
               </Link>
             </li>
 
-
-            <li className={isActive('/account/password')} >
+            <li className={isActive("/account/password")}>
               <Link
                 to="/account/password"
                 className="text-decoration-none d-flex align-items-start"
@@ -117,13 +112,11 @@ const AccountSidebar = () => {
                 <div className="far fa-user pt-2 me-3" />
                 <div className="d-flex flex-column">
                   <div className="link">Change Password</div>
-                  <div className="link-desc">
-                    Change your profile password
-                  </div>
+                  <div className="link-desc">Change your profile password</div>
                 </div>
               </Link>
             </li>
-            <li className={isActive('/account/support')} >
+            <li className={isActive("/account/support")}>
               <Link
                 to="/account/support"
                 className="text-decoration-none d-flex align-items-start"
@@ -141,15 +134,12 @@ const AccountSidebar = () => {
         </div>
       </div>
 
-
       <div className="overlay col-md-3 mt-1 d-none" id="left">
-
         <Link to="/account/" class="mb-3">
           <button className="btn2 mt-2 form-control" fdprocessedid="b0h82a">
             <span>Dashboard</span>
           </button>
         </Link>
-
 
         <Link to="/account/orders" class="mb-3">
           <button className="btn2 mt-2 form-control" fdprocessedid="b0h82a">
@@ -174,11 +164,9 @@ const AccountSidebar = () => {
             <span> Logout</span>
           </button>
         </Link>
-
       </div>
-
     </>
-  )
-}
+  );
+};
 
-export default AccountSidebar
+export default AccountSidebar;

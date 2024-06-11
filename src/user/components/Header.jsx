@@ -8,10 +8,71 @@ import Cart from "./Cart";
 import logo from "../assets_user/img/logo/ecomm-logo.jpg"; // Import the logo image
 import { useBlogContext } from "../../fetchdata/BlogContext";
 import $ from "jquery";
+import homeAppliances from "./home-appliances.png";
+import televisions from "./television.png";
 import { Helmet } from "react-helmet";
 import getCookie from "./extra/getCookie";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import eraseCookie from "./extra/eraseCookie";
-
+import kitchenAppliances from "./kitchen.png";
+import personalCare from "./personal-care.png";
+import mobileAndAccessories from "./mobile-accessories.png";
+import audio from "./audio.png";
+import { Fragment } from "react";
+import {
+  Popover,
+  PopoverButton,
+  PopoverPanel,
+  Transition,
+} from "@headlessui/react";
+import {
+  ChevronDownIcon,
+  PhoneIcon,
+  PlayCircleIcon,
+} from "@heroicons/react/20/solid";
+import {
+  ArrowPathIcon,
+  ChartPieIcon,
+  CursorArrowRaysIcon,
+  FingerPrintIcon,
+  SquaresPlusIcon,
+} from "@heroicons/react/24/outline";
+const solutions = [
+  {
+    name: "Analytics",
+    description: "Get a better understanding of your traffic",
+    href: "#",
+    icon: ChartPieIcon,
+  },
+  {
+    name: "Engagement",
+    description: "Speak directly to your customers",
+    href: "#",
+    icon: CursorArrowRaysIcon,
+  },
+  {
+    name: "Security",
+    description: "Your customers' data will be safe and secure",
+    href: "#",
+    icon: FingerPrintIcon,
+  },
+  {
+    name: "Integrations",
+    description: "Connect with third-party tools",
+    href: "#",
+    icon: SquaresPlusIcon,
+  },
+  {
+    name: "Automations",
+    description: "Build strategic funnels that will convert",
+    href: "#",
+    icon: ArrowPathIcon,
+  },
+];
+const callsToAction = [
+  { name: "Watch demo", href: "#", icon: PlayCircleIcon },
+  { name: "Contact sales", href: "#", icon: PhoneIcon },
+];
 const MenuItem = ({ item }) => {
   return (
     <li key={item.id} className={item.children ? "has_submenu" : ""}>
@@ -36,6 +97,31 @@ const MenuItem = ({ item }) => {
     </li>
   );
 };
+
+const iconsAccordingly = (itemText) => {
+  if (itemText === "Televisions") {
+    return televisions;
+  } else if (itemText === "Home Appliances") {
+    return homeAppliances;
+  } else if (itemText === "Kitchen Appliances") {
+    return kitchenAppliances;
+  } else if (itemText === "Personal Care") {
+    return personalCare;
+  } else if (itemText === "Mobiles & Accessories") {
+    return mobileAndAccessories;
+  } else {
+    return audio;
+  }
+};
+// () => {
+// console.log(item, "%%%%%;");
+// if (item.text == "Televisions") {
+//   return televisions;
+// }
+// {
+//   return homeAppliances;
+//   }
+// }
 
 const SubMenu = ({ items }) => {
   return (
@@ -342,7 +428,12 @@ const Header = () => {
             className={isStuck ? "navbar-sticky navbar-stuck" : "navbar-sticky"}
           >
             {/* Navbar */}
-            <div className="navbar navbar-middle navbar-expand-lg">
+            <div
+              className="navbar navbar-middle navbar-expand-lg"
+              style={{
+                borderBottom: "1px solid #ddd",
+              }}
+            >
               <div className="container">
                 {/* Logo */}
                 <Link className="navbar-brand flex-shrink-0 d-sm-none" to="/">
@@ -615,176 +706,145 @@ const Header = () => {
               {" "}
             </div>
 
-            <div
-              className={`navbar navbar-expand-lg navbar-stuck-menu py-0 py-lg-1 bg-body-tertiary${
-                isMenuOpen ? " show" : ""
-              }`}
-            >
-              <div className="container">
-                <div
-                  className="collapse navbar-collapse show"
-                  id="navbarCollapse"
-                >
-                  {/* Departments Menu */}
-                  <ul className="navbar-nav mega-nav pe-lg-1 me-lg-1  mt-3 mt-lg-0 d-lg-none">
-                    <div className="navbar-actions d-lg-none w-100 justify-content-between mb-2 bg-black p-3">
-                      <a
-                        href="account-login"
-                        className="navbar-actions-item bg-black"
-                        previewlistener="true"
-                      >
-                        <div className="navbar-actions-icon-box">
-                          <i className="navbar-actions-icon ri-user-line fs-5" />
-                        </div>
-                        <div className="navbar-actions-text fs-md pe-3">
-                          <small className="d-block mb-n1">Sign In</small>{" "}
-                          Account
-                        </div>
-                      </a>
+            {/* navbar  */}
+            {/* navbar-expand-lg navbar-stuck-menu py-0 py-lg-1 bg-body-tertiary bg-white */}
 
-                      <Link
-                        href="#"
-                        className="navbar-actions-item d-lg-none bg-black"
-                        onClick={handleMenuToggle}
-                      >
-                        <div className="navbar-actions-icon-box">
-                          {isMenuOpen ? (
-                            <i className="navbar-actions-icon ri-close-line fs-7" />
-                          ) : (
-                            <i className="navbar-actions-icon ri-menu-line fs-5" />
-                          )}
-                        </div>
-                      </Link>
-                    </div>
-
-                    <li className="nav-item dropdown">
-                      {/* <a
-                  className="nav-link dropdown-toggle ps-lg-0"
-                  href="#"
-                  data-bs-toggle="dropdown"
-                  data-bs-auto-close="outside"
-                >
-                  <i className="ri-function-line me-2" /> All Departments{" "}
-                </a> */}
-                    </li>
-                  </ul>
-                  {/* Departments Menu */}
-                  {/* Primary Menu */}
-                  <ul className="navbar-nav w-100 d-flex justify-content-between">
-                    <li className="nav-item">
-                      <Link
-                        className="nav-link"
-                        id="mobile_menu_trigger"
-                        to="#"
-                        onClick={toggleMenu}
-                      >
-                        All
-                      </Link>
-                    </li>
-
-                    {isHeader
-                      ? // Display loading skeletons while data is being fetched
-                        Array.from({ length: 8 }).map((_, index) => (
-                          <div className="nav-item" key={index}>
-                            <div
-                              className="skeleton mt-1"
-                              style={{
-                                height: 22,
-                                width: 100,
-                                borderRadius: 5,
-                              }}
-                            ></div>
-                          </div>
-                        ))
-                      : // Render first-level menu items
-                        Headers.header !== undefined &&
-                        Headers.header.slice(0, 8).map((item) => {
-                          return (
-                            <li className="nav-item" key={item.id}>
-                              <Link
-                                className={`nav-link ${
-                                  item.children && item.children.length > 0
-                                    ? "dropdown-toggle"
-                                    : ""
-                                }`}
-                                to={
-                                  item.children && item.children.length > 0
-                                    ? "#"
-                                    : item.link
-                                }
-                                {...(item.children &&
-                                  item.children.length > 0 && {
-                                    "data-bs-toggle": "dropdown",
-                                  })}
-                              >
-                                {item.text}
-                              </Link>
-
-                              {item.children && item.children.length > 0 && (
-                                <>
-                                  <div className="dropdown-menu p-0">
-                                    <div className="row  px-4 py-4">
-                                      {item.children
-                                        .slice(0, 50)
-                                        .map((child) => (
-                                          <>
-                                            {" "}
-                                            <div className="col-md-3">
-                                              {" "}
-                                              <div className="widget widget-links mb-4">
-                                                <h6 className="fs-base mb-3">
-                                                  {" "}
-                                                  <Link
-                                                    className="widget-list-link"
-                                                    to={child.link}
-                                                    target={
-                                                      child.target === "_blank"
-                                                        ? "_blank"
-                                                        : ""
-                                                    }
-                                                  >
-                                                    <b> {child.text} </b>
-                                                  </Link>
-                                                </h6>
-                                                <ul className="widget-list">
-                                                  {child.children
-                                                    .slice(0, 20)
-                                                    .map((child) => (
-                                                      <li className="widget-list-item">
-                                                        <Link
-                                                          className="widget-list-link"
-                                                          to={child.link}
-                                                          target={
-                                                            child.target ===
-                                                            "_blank"
-                                                              ? "_blank"
-                                                              : ""
-                                                          }
-                                                        >
-                                                          {child.text}
-                                                        </Link>
-                                                      </li>
-                                                    ))}
-                                                </ul>
-                                              </div>{" "}
-                                            </div>
-                                          </>
-                                        ))}
-                                    </div>
-                                  </div>
-                                </>
-                              )}
-                            </li>
-                          );
-                        })}
-                  </ul>
-                  {/* Primary Menu */}
-                </div>
-              </div>
-            </div>
             {/* Navs */}
           </div>
           {/* Navbar Sticky */}
+          <ul className="categories-on-home">
+            {isHeader
+              ? // Display loading skeletons while data is being fetched
+                Array.from({ length: 8 }).map((_, index) => (
+                  <div className="nav-item" key={index}>
+                    <div
+                      className="skeleton mt-1"
+                      style={{
+                        height: 22,
+                        width: 100,
+                        borderRadius: 5,
+                      }}
+                    ></div>
+                  </div>
+                ))
+              : Headers.header !== undefined &&
+                Headers.header.slice(0, 8).map((item) => {
+                  return (
+                    <li className="category">
+                      <img
+                        src={
+                          iconsAccordingly(item.text)
+                          // () => {
+                          // console.log(item, "%%%%%;");
+                          // if (item.text == "Televisions") {
+                          //   return televisions;
+                          // }
+                          // {
+                          //   return homeAppliances;
+                          //   }
+                          // }
+                        }
+                        className="category-img"
+                        alt="category"
+                      />
+                      {/* pop  */}
+                      <Popover className="relative">
+                        <PopoverButton className="flex items-center outline-none gap-x-1 text-sm font-semibold leading-6 text-gray-900">
+                          {item.children && item.children.length > 0 ? (
+                            <p className="category-name">{item.text}</p>
+                          ) : (
+                            <Link
+                              to={
+                                item.children && item.children.length > 0
+                                  ? "#"
+                                  : item.link
+                              }
+                              className="category-name"
+                              style={{ marginBottom: "1rem", color: "black" }}
+                            >
+                              {item.text}
+                            </Link>
+                          )}
+                          {item.children && item.children.length > 0 && (
+                            <MdOutlineKeyboardArrowDown
+                              style={{
+                                marginBottom: "0.5rem",
+                                fontSize: "18px",
+                                marginLeft: "-0.3rem",
+                              }}
+                            />
+                          )}
+                        </PopoverButton>
+
+                        <Transition
+                          enter="transition ease-out duration-200"
+                          enterFrom="opacity-0 translate-y-1"
+                          enterTo="opacity-100 translate-y-0"
+                          leave="transition ease-in duration-150"
+                          leaveFrom="opacity-100 translate-y-0"
+                          leaveTo="opacity-0 translate-y-1"
+                        >
+                          <PopoverPanel className="absolute left-1/2 z-10 flex w-screen max-w-max -translate-x-1/2 px-4">
+                            <div className="w-screen max-w-[12rem] flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
+                              <div
+                                className="p-4 max-h-[400px] scroll"
+                                style={{ overflow: "scroll" }}
+                              >
+                                {item.children &&
+                                  item.children.length > 0 &&
+                                  item.children.slice(0, 50).map((child) => {
+                                    return (
+                                      <div
+                                        key={child.name}
+                                        className="group relative flex-col flex gap-x-6 rounded-lg hover:bg-gray-50"
+                                      >
+                                        <Link
+                                          to={child.link}
+                                          target={
+                                            child.target === "_blank"
+                                              ? "_blank"
+                                              : ""
+                                          }
+                                        >
+                                          <b> {child.text} </b>
+                                        </Link>
+                                        <ul
+                                          className="widget-list"
+                                          style={{
+                                            marginTop: "0.5rem",
+                                            marginBottom: "0.5rem",
+                                          }}
+                                        >
+                                          {child.children
+                                            .slice(0, 20)
+                                            .map((child) => (
+                                              <li className="widget-list-item">
+                                                <Link
+                                                  className="widget-list-link"
+                                                  to={child.link}
+                                                  target={
+                                                    child.target === "_blank"
+                                                      ? "_blank"
+                                                      : ""
+                                                  }
+                                                >
+                                                  {child.text}
+                                                </Link>
+                                              </li>
+                                            ))}
+                                        </ul>
+                                      </div>
+                                    );
+                                  })}
+                              </div>
+                            </div>
+                          </PopoverPanel>
+                        </Transition>
+                      </Popover>
+                    </li>
+                  );
+                })}
+          </ul>
         </header>
 
         <div id="mobile_menu_container" className="">
