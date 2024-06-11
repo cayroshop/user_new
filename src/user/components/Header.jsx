@@ -16,11 +16,14 @@ import eraseCookie from "./extra/eraseCookie";
 
 const MenuItem = ({ item }) => {
   return (
-    <li key={item.id} className={item.children ? 'has_submenu' : ''}>
+    <li key={item.id} className={item.children ? "has_submenu" : ""}>
       {item.children && item.children.length > 0 ? (
         <>
           <span>
-            <Link to={item.link} target={item.target === '_blank' ? '_blank' : ''}>
+            <Link
+              to={item.link}
+              target={item.target === "_blank" ? "_blank" : ""}
+            >
               {item.text}
             </Link>
             <i class="ri-arrow-right-s-line"></i>
@@ -28,7 +31,7 @@ const MenuItem = ({ item }) => {
           <SubMenu items={item.children} />
         </>
       ) : (
-        <Link to={item.link} target={item.target === '_blank' ? '_blank' : ''}>
+        <Link to={item.link} target={item.target === "_blank" ? "_blank" : ""}>
           {item.text}
         </Link>
       )}
@@ -37,9 +40,6 @@ const MenuItem = ({ item }) => {
 };
 
 const SubMenu = ({ items }) => {
-
-
-
   return (
     <ul className="submenu">
       <li>
@@ -47,7 +47,7 @@ const SubMenu = ({ items }) => {
           <i class="ri-arrow-left-line"></i> Back
         </span>
       </li>
-      {items.map(child => (
+      {items.map((child) => (
         <MenuItem key={child.id} item={child} />
       ))}
     </ul>
@@ -59,23 +59,20 @@ const Header = () => {
 
   const [user, setUser] = useState(null);
 
-
-  const [showSearch, setShowSearch] = useState('false');
+  const [showSearch, setShowSearch] = useState("false");
   const toggleSearch = () => {
     setShowSearch(!showSearch);
   };
-
 
   require("../assets_user/css/style.css");
   require("../assets_user/css/plugins.css");
   // require('../assets_user/fonts/icons.css')
 
-  const { Headers, isHeader, cartItems, AllProducts, AllCategoriess } = useBlogContext();
+  const { Headers, isHeader, cartItems, AllProducts, AllCategoriess } =
+    useBlogContext();
   if (isHeader) {
     // console.log("Headers", Headers);
   }
-
-
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -97,14 +94,11 @@ const Header = () => {
     parentSubMenu.classList.remove("open");
   };
 
-
   useEffect(() => {
     $("#mobile_menu_container").removeClass("open");
     const storedUser = JSON.parse(getCookie("user"));
     setUser(storedUser);
   }, [location.pathname]);
-
-
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -116,7 +110,6 @@ const Header = () => {
     $("#mobile_menu_trigger_mob").click(function () {
       $("#mobile_menu_container").toggleClass("open");
     });
-
 
     $("#mobile_menu_container, .mobile_menu_close, .mobile_menu_close i").on(
       "click",
@@ -151,10 +144,10 @@ const Header = () => {
     setSearchQuery("");
   };
 
-  const filteredProducts = AllProducts.filter(item =>
+  const filteredProducts = AllProducts.filter((item) =>
     item.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  const filteredCategories = AllCategoriess.filter(category =>
+  const filteredCategories = AllCategoriess.filter((category) =>
     category.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const [isStuck, setIsStuck] = useState(false);
@@ -190,7 +183,7 @@ const Header = () => {
   const [value, setValue] = useState();
 
   // const isLoginFromLocalStorage = localStorage.getItem("token") ? true : false;
-  const isLoginFromLocalStorage = getCookie('token') ? true : false;
+  const isLoginFromLocalStorage = getCookie("token") ? true : false;
   const [isLogin, setIsLogin] = useState(isLoginFromLocalStorage);
 
   useEffect(() => {
@@ -203,14 +196,13 @@ const Header = () => {
       dispatch(authActions.logout());
       toast.success("Logout Successfully");
       navigate("/login");
-       localStorage.clear();
-       eraseCookie('token');
-       eraseCookie('userId');
-       eraseCookie('user');
-    //  localStorage.removeItem("token");
+      localStorage.clear();
+      eraseCookie("token");
+      eraseCookie("userId");
+      eraseCookie("user");
+      //  localStorage.removeItem("token");
       // localStorage.removeItem("userId");
       // localStorage.removeItem("user");
-      
     } catch (error) {
       console.log(error);
     }
@@ -229,14 +221,13 @@ const Header = () => {
         {Headers && Headers.meta_favicon && (
           <link rel="apple-touch-icon" href={Headers.meta_favicon} />
         )}
-        {Headers && Headers.meta_title && (
-          <title>{Headers.meta_title}</title>
-        )}
+        {Headers && Headers.meta_title && <title>{Headers.meta_title}</title>}
         {Headers && Headers.head && (
-          <React.Fragment dangerouslySetInnerHTML={{ __html: Headers.meta_head }} />
+          <React.Fragment
+            dangerouslySetInnerHTML={{ __html: Headers.meta_head }}
+          />
         )}
       </Helmet>
-
 
       <nav class="navbar" style={{ display: "none" }}>
         <div class="container-fluid">
@@ -362,7 +353,7 @@ const Header = () => {
                   ) : (
                     <div
                       className="card-1 skeleton"
-                      style={{ borderRadius: 5,aspectRatio:'300/42' }}
+                      style={{ borderRadius: 5, aspectRatio: "300/42" }}
                     ></div>
                   )}
                 </Link>
@@ -461,73 +452,101 @@ const Header = () => {
                 {/* Search */}
                 {/* Navbar Actions */}
 
+                <div
+                  className={`input-group d-none d-lg-flex me-5 searchbox ${
+                    !showSearch && "search-view"
+                  }`}
+                >
+                  <button
+                    type="button"
+                    className="btn btn-primary bg-gradient d-none d-lg-block search"
+                  ></button>
 
-                <div className={`input-group d-none d-lg-flex me-5 searchbox ${!showSearch && 'search-view'}`}>
-  <button
-    type="button"
-    className="btn btn-primary bg-gradient d-none d-lg-block search"
-  >
-  </button>
+                  <div className="wrap">
+                    <div className="search">
+                      <input
+                        type="text"
+                        className="searchTerm"
+                        placeholder="What are you looking for?"
+                        value={searchQuery}
+                        onChange={handleInputChange}
+                      />
+                      <button type="submit" className="searchButton">
+                        <Link
+                          to="/"
+                          className="daily-deals-badge1 d-none d-xl-inline-block d-2xl-inline-block"
+                        >
+                          <MdLocalOffer /> Daily Deals
+                        </Link>
+                        <Link
+                          to="/"
+                          className="daily-deals-badge2 d-none d-xl-inline-block d-2xl-inline-block"
+                        >
+                          <BiSolidHot /> Hot Deals
+                        </Link>
+                        <i className="ri-search-line"></i>
+                      </button>
+                    </div>
+                  </div>
 
-  <div className="wrap">
-    <div className="search">
-      <input
-        type="text"
-        className="searchTerm"
-        placeholder="What are you looking for?"
-        value={searchQuery}
-        onChange={handleInputChange}
-      />
-      <button type="submit" className="searchButton">
-        <Link to="/" className="daily-deals-badge1 d-none d-xl-inline-block d-2xl-inline-block"><MdLocalOffer /> Daily Deals</Link>
-        <Link to="/" className="daily-deals-badge2 d-none d-xl-inline-block d-2xl-inline-block"><BiSolidHot /> Hot Deals</Link>
-        <i className="ri-search-line"></i>
-      </button>
-    </div>
-  </div>
+                  {searchQuery && (
+                    <ul className="searchfloat">
+                      {filteredProducts.length > 0
+                        ? filteredProducts.map((item) => (
+                            <li key={item.id}>
+                              <Link
+                                to={`/product/${item._id}`}
+                                onClick={handleClearClick}
+                              >
+                                <i
+                                  className="ri-search-line"
+                                  style={{
+                                    color: "#f55a01",
+                                    fontWeight: "bolder",
+                                  }}
+                                ></i>{" "}
+                                {item.title}
+                              </Link>
+                            </li>
+                          ))
+                        : null}
 
-  {searchQuery && (
-    <ul className="searchfloat">
-      {filteredProducts.length > 0 ? filteredProducts.map(item => (
-        <li key={item.id}>
-          <Link to={`/product/${item._id}`} onClick={handleClearClick}>
-          <i className="ri-search-line" style={{color:"#f55a01" , fontWeight:"bolder"}}></i>       {item.title}  
-                
-          </Link>
-        </li>
-      )) : null}
+                      {filteredCategories.length > 0
+                        ? filteredCategories.map((item) => (
+                            <li key={item.id}>
+                              <Link
+                                to={`/category/${item._id}`}
+                                onClick={handleClearClick}
+                              >
+                                <i className="ri-list-check-2"></i> {item.title}
+                              </Link>
+                            </li>
+                          ))
+                        : null}
 
-      {filteredCategories.length > 0 ? filteredCategories.map(item => (
-        <li key={item.id}>
-          <Link to={`/category/${item._id}`} onClick={handleClearClick}>
-            <i className="ri-list-check-2"></i> {item.title}
-          </Link>
-        </li>
-      )) : null}
+                      {filteredProducts.length === 0 &&
+                        filteredCategories.length === 0 && (
+                          <li className="bg-info-inverse">
+                            <p className="pt-1 px-3 text-center">
+                              {" "}
+                              No Product & Category Found{" "}
+                            </p>
+                          </li>
+                        )}
+                    </ul>
+                  )}
 
-      {filteredProducts.length === 0 && filteredCategories.length === 0 && (
-        <li className="bg-info-inverse">
-          <p className="pt-1 px-3 text-center text-white"> No Product & Category Found </p>
-        </li>
-      )}
-    </ul>
-  )}
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      className="btn btn-primary bg-gradient d-lg-block close"
+                      onClick={handleClearClick}
+                    >
+                      <i className="navbar-actions-icon ri-close-line fs-7"></i>
+                    </button>
+                  )}
+                </div>
 
-  {searchQuery && (
-    <button
-      type="button"
-      className="btn btn-primary bg-gradient d-lg-block close"
-      onClick={handleClearClick}
-    >
-      <i className="navbar-actions-icon ri-close-line fs-7"></i>
-    </button>
-  )}
-</div>
-
-
-
-
-    
                 <div className="navbar-actions">
                   <Link
                     className="navbar-actions-item navbar-stuck-toggle"
@@ -555,63 +574,69 @@ const Header = () => {
                     </div>
                   </Link>
 
+                  {isLogin ? (
+                    <>
+                      <div class="d-flex">
+                        <Link to="/account" className="navbar-actions-item">
+                          <div className="navbar-actions-icon-box">
+                            <i className="navbar-actions-icon ri-user-line fs-5" />
+                          </div>
+                          <div className="navbar-actions-text d-none d-lg-block fs-md pe-3">
+                            <small className="d-block mb-n1">
+                              {" "}
+                              {user &&
+                              user.username !== "" &&
+                              user.username !== undefined ? (
+                                user.username
+                              ) : (
+                                <> Welcome, User </>
+                              )}{" "}
+                            </small>{" "}
+                            <b> My Account</b>
+                          </div>
+                        </Link>
 
-                  {isLogin ? (<>
+                        <Link
+                          onClick={handleLogout}
+                          className="navbar-actions-item d-mob-none"
+                        >
+                          <div className="navbar-actions-icon-box ">
+                            <i class="navbar-actions-icon  ri-logout-box-r-line fs-5" />
+                          </div>
+                          <div className="navbar-actions-text d-none d-lg-block fs-md pe-3">
+                            <small className="d-block mb-n1"> Account </small>{" "}
+                            <b className="text-danger"> Logout</b>
+                          </div>
+                        </Link>
+                      </div>
 
-
-                    <div class="d-flex">
-
-                      <Link to='/account' className="navbar-actions-item">
+                      <Link
+                        to="/wishList"
+                        className="navbar-actions-item d-mob-none"
+                      >
+                        <div className="navbar-actions-icon-box">
+                          <svg
+                            style={{ width: 30, height: 30 }}
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                          >
+                            <path d="M349.6 64c-36.4 0-70.718 16.742-93.6 43.947C233.117 80.742 198.8 64 162.4 64 97.918 64 48 114.221 48 179.095c0 79.516 70.718 143.348 177.836 241.694L256 448l30.164-27.211C393.281 322.442 464 258.61 464 179.095 464 114.221 414.082 64 349.6 64zm-80.764 329.257l-4.219 3.873-8.617 7.773-8.616-7.772-4.214-3.869c-50.418-46.282-93.961-86.254-122.746-121.994C92.467 236.555 80 208.128 80 179.095c0-22.865 8.422-43.931 23.715-59.316C118.957 104.445 139.798 96 162.4 96c26.134 0 51.97 12.167 69.11 32.545L256 157.661l24.489-29.116C297.63 108.167 323.465 96 349.6 96c22.603 0 43.443 8.445 58.686 23.778C423.578 135.164 432 156.229 432 179.095c0 29.033-12.467 57.459-40.422 92.171-28.784 35.74-72.325 75.709-122.742 121.991z" />
+                          </svg>
+                        </div>
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link to="/login" className="navbar-actions-item">
                         <div className="navbar-actions-icon-box">
                           <i className="navbar-actions-icon ri-user-line fs-5" />
                         </div>
                         <div className="navbar-actions-text d-none d-lg-block fs-md pe-3">
-                          <small className="d-block mb-n1"> {user && user.username !== '' && user.username !== undefined ? (
-      user.username 
-      ) : (
-    <> Welcome, User  </> 
-      )} </small>  <b  > My Account</b>
+                          <small className="d-block mb-n1">Login</small> Account
                         </div>
                       </Link>
-
-                      <Link onClick={handleLogout} className="navbar-actions-item d-mob-none">
-                        <div className="navbar-actions-icon-box ">
-                          < i class="navbar-actions-icon  ri-logout-box-r-line fs-5" />
-                        </div>
-                        <div className="navbar-actions-text d-none d-lg-block fs-md pe-3">
-                          <small className="d-block mb-n1"> Account </small>  <b className="text-danger"> Logout</b>
-                        </div>
-                      </Link>
-
-                    </div>
-
-                    <Link to="/wishList" className="navbar-actions-item d-mob-none">
-                    <div className="navbar-actions-icon-box">
-                      <svg
-                        style={{ width: 30, height: 30 }}
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 512 512"
-                      >
-                        <path d="M349.6 64c-36.4 0-70.718 16.742-93.6 43.947C233.117 80.742 198.8 64 162.4 64 97.918 64 48 114.221 48 179.095c0 79.516 70.718 143.348 177.836 241.694L256 448l30.164-27.211C393.281 322.442 464 258.61 464 179.095 464 114.221 414.082 64 349.6 64zm-80.764 329.257l-4.219 3.873-8.617 7.773-8.616-7.772-4.214-3.869c-50.418-46.282-93.961-86.254-122.746-121.994C92.467 236.555 80 208.128 80 179.095c0-22.865 8.422-43.931 23.715-59.316C118.957 104.445 139.798 96 162.4 96c26.134 0 51.97 12.167 69.11 32.545L256 157.661l24.489-29.116C297.63 108.167 323.465 96 349.6 96c22.603 0 43.443 8.445 58.686 23.778C423.578 135.164 432 156.229 432 179.095c0 29.033-12.467 57.459-40.422 92.171-28.784 35.74-72.325 75.709-122.742 121.991z" />
-                      </svg>
-                    </div>
-                  </Link>
-
-                  </>) : (<>
-
-                    <Link to="/login" className="navbar-actions-item">
-                      <div className="navbar-actions-icon-box">
-                        <i className="navbar-actions-icon ri-user-line fs-5" />
-                      </div>
-                      <div className="navbar-actions-text d-none d-lg-block fs-md pe-3">
-                        <small className="d-block mb-n1">Login</small> Account
-                      </div>
-                    </Link>
-                  </>)}
-
-
-
-                 
+                    </>
+                  )}
 
                   <Link to="/cart" className="navbar-actions-item">
                     <div className="navbar-actions-icon-box">
@@ -628,20 +653,21 @@ const Header = () => {
                     </div>
 
                     {cartItems.length > 0 && (
-                      <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"> {cartItems.length}</span>
+                      <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {" "}
+                        {cartItems.length}
+                      </span>
                     )}
-
-
                   </Link>
 
-                  <button onClick={toggleSearch} className="navbar-actions-item border-0 d-lg-none">
+                  <button
+                    onClick={toggleSearch}
+                    className="navbar-actions-item border-0 d-lg-none"
+                  >
                     <div className="navbar-actions-icon-box">
                       <i className="navbar-actions-icon ri-search-line fs-5" />
                     </div>
-
                   </button>
-
-
                 </div>
                 {/* Navbar Actions */}
               </div>
@@ -649,15 +675,17 @@ const Header = () => {
             {/* Navbar */}
             {/* Navs */}
             <div
-              className={`${isMenuOpen ? "overlayshow d-lg-none" : "d-lg-none"
-                }`}
+              className={`${
+                isMenuOpen ? "overlayshow d-lg-none" : "d-lg-none"
+              }`}
             >
               {" "}
             </div>
 
             <div
-              className={`navbar navbar-expand-lg navbar-stuck-menu py-0 py-lg-1 bg-body-tertiary${isMenuOpen ? " show" : ""
-                }`}
+              className={`navbar navbar-expand-lg navbar-stuck-menu py-0 py-lg-1 bg-body-tertiary${
+                isMenuOpen ? " show" : ""
+              }`}
             >
               <div className="container">
                 <div
@@ -705,8 +733,6 @@ const Header = () => {
                 >
                   <i className="ri-function-line me-2" /> All Departments{" "}
                 </a> */}
-
-           
                     </li>
                   </ul>
                   {/* Departments Menu */}
@@ -723,77 +749,101 @@ const Header = () => {
                       </Link>
                     </li>
 
-                 
-
                     {isHeader
                       ? // Display loading skeletons while data is being fetched
-                      Array.from({ length: 8 }).map((_, index) => (
-                        <div className="nav-item" key={index}>
-                          <div
-                            className="skeleton mt-1"
-                            style={{
-                              height: 22,
-                              width: 100,
-                              borderRadius: 5,
-                            }}
-                          ></div>
-                        </div>
-                      ))
+                        Array.from({ length: 8 }).map((_, index) => (
+                          <div className="nav-item" key={index}>
+                            <div
+                              className="skeleton mt-1"
+                              style={{
+                                height: 22,
+                                width: 100,
+                                borderRadius: 5,
+                              }}
+                            ></div>
+                          </div>
+                        ))
                       : // Render first-level menu items
-                      Headers.header !== undefined && Headers.header.slice(0, 8).map((item) => {
-                        return (
-                          <li className="nav-item" key={item.id}>
-                            <Link
-                              className={`nav-link ${item.children && item.children.length > 0 ? 'dropdown-toggle' : ''}`}
-                              to={item.children && item.children.length > 0 ? '#' : item.link}
-                              {...(item.children && item.children.length > 0 && { 'data-bs-toggle': 'dropdown' })}
-                            >
-                              {item.text}
-                            </Link>
+                        Headers.header !== undefined &&
+                        Headers.header.slice(0, 8).map((item) => {
+                          return (
+                            <li className="nav-item" key={item.id}>
+                              <Link
+                                className={`nav-link ${
+                                  item.children && item.children.length > 0
+                                    ? "dropdown-toggle"
+                                    : ""
+                                }`}
+                                to={
+                                  item.children && item.children.length > 0
+                                    ? "#"
+                                    : item.link
+                                }
+                                {...(item.children &&
+                                  item.children.length > 0 && {
+                                    "data-bs-toggle": "dropdown",
+                                  })}
+                              >
+                                {item.text}
+                              </Link>
 
-
-
-                            {item.children && item.children.length > 0 && (
-                              <>
-
-                                <div className="dropdown-menu p-0">
-                                  <div className="row  px-4 py-4">
-
-                                    {item.children.slice(0, 50).map(child => (
-                                      <>  <div className="col-md-3">  <div className="widget widget-links mb-4">
-                                        <h6 className="fs-base mb-3"> <Link
-                                              className="widget-list-link"
-                                              to={child.link} target={child.target === '_blank' ? '_blank' : ''}
-                                            >
-                                             <b> {child.text} </b> 
-                                            </Link></h6>
-                                        <ul className="widget-list">
-                                          {child.children.slice(0, 20).map(child => (<li className="widget-list-item">
-                                            <Link
-                                              className="widget-list-link"
-                                              to={child.link} target={child.target === '_blank' ? '_blank' : ''}
-                                            >
-                                              {child.text}
-                                            </Link>
-                                          </li>))}
-                                        </ul>
-                                      </div>  </div>
-
-                                      </>
-                                    ))}
-
+                              {item.children && item.children.length > 0 && (
+                                <>
+                                  <div className="dropdown-menu p-0">
+                                    <div className="row  px-4 py-4">
+                                      {item.children
+                                        .slice(0, 50)
+                                        .map((child) => (
+                                          <>
+                                            {" "}
+                                            <div className="col-md-3">
+                                              {" "}
+                                              <div className="widget widget-links mb-4">
+                                                <h6 className="fs-base mb-3">
+                                                  {" "}
+                                                  <Link
+                                                    className="widget-list-link"
+                                                    to={child.link}
+                                                    target={
+                                                      child.target === "_blank"
+                                                        ? "_blank"
+                                                        : ""
+                                                    }
+                                                  >
+                                                    <b> {child.text} </b>
+                                                  </Link>
+                                                </h6>
+                                                <ul className="widget-list">
+                                                  {child.children
+                                                    .slice(0, 20)
+                                                    .map((child) => (
+                                                      <li className="widget-list-item">
+                                                        <Link
+                                                          className="widget-list-link"
+                                                          to={child.link}
+                                                          target={
+                                                            child.target ===
+                                                            "_blank"
+                                                              ? "_blank"
+                                                              : ""
+                                                          }
+                                                        >
+                                                          {child.text}
+                                                        </Link>
+                                                      </li>
+                                                    ))}
+                                                </ul>
+                                              </div>{" "}
+                                            </div>
+                                          </>
+                                        ))}
+                                    </div>
                                   </div>
-                                </div>
-                              </>
-                            )}
-
-
-
-
-
-                          </li>
-                        );
-                      })}
+                                </>
+                              )}
+                            </li>
+                          );
+                        })}
                   </ul>
                   {/* Primary Menu */}
                 </div>
@@ -815,7 +865,6 @@ const Header = () => {
               </div>
             </div>
             <div id="mobile_menu_image_links"></div>
-
 
             {/* <ul id="mobile_menu">
               <li>
@@ -912,75 +961,43 @@ const Header = () => {
               </li>
             </ul> */}
 
-
-
             <ul id="mobile_menu">
-              {Headers.header && Headers.header.length > 0 && Headers.header.map(item => (
-                <MenuItem key={item.id} item={item} />
-              ))}
+              {Headers.header &&
+                Headers.header.length > 0 &&
+                Headers.header.map((item) => (
+                  <MenuItem key={item.id} item={item} />
+                ))}
 
               <li className="has_submenu">
-                <Link
-                  to="/allblogs"
-                >
-                  All Blogs
-                </Link>
+                <Link to="/allblogs">All Blogs</Link>
               </li>
 
-              {isLogin ? (<>
-                <li className="has_submenu">
-                  <Link
-                    to="/account"
-                  >
-                    Account
-                  </Link>
-                </li>
+              {isLogin ? (
+                <>
+                  <li className="has_submenu">
+                    <Link to="/account">Account</Link>
+                  </li>
 
-                <li className="has_submenu">
-                  <Link
-                    to="/wishList"
-                  >
-                    Wishlist
-                  </Link>
-                </li>
+                  <li className="has_submenu">
+                    <Link to="/wishList">Wishlist</Link>
+                  </li>
 
+                  <li className="has_submenu">
+                    <Link to="/comparsion">Comparsion</Link>
+                  </li>
 
-                <li className="has_submenu">
-                  <Link
-                    to="/comparsion"
-                  >
-                    Comparsion
-                  </Link>
-                </li>
-
-                <li className="has_submenu">
-                  <Link
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </Link>
-                </li>
-
-
-              </>) : (<>
-
-                <li className="has_submenu">
-                  <Link
-                    to="/comparsion"
-                  >
-                    Login / Signup
-                  </Link>
-                </li>
-
-
-
-              </>)
-              }
-
+                  <li className="has_submenu">
+                    <Link onClick={handleLogout}>Logout</Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li className="has_submenu">
+                    <Link to="/comparsion">Login / Signup</Link>
+                  </li>
+                </>
+              )}
             </ul>
-
-
-
           </div>
         </div>
 
