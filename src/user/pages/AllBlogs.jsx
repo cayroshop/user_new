@@ -57,11 +57,11 @@ const AllBlogs = () => {
       <main className="page whitesmoke">
         {/* Header */}
         {/* Header */}
-        {/* Blog Title */}
+        {/* Blog Title
         <div className="py-4" >
           <div className="container d-lg-flex justify-content-between align-items-center py-2">
             <div className="pe-lg-4 text-center text-lg-start">
-              <h1 className="h3 mb-0">All Blog</h1>
+              <h1 className="h3 mb-0">The Cayro Enterprise Blog</h1>
             </div>
             <div className="pt-2 pt-lg-0">
               <nav aria-label="breadcrumb">
@@ -86,7 +86,25 @@ const AllBlogs = () => {
               </nav>
             </div>
           </div>
-        </div>
+        </div> */}
+        
+
+        <main className="container">
+  <div className="p-7 p-md-5 mb-4 rounded text-body-emphasis bg-bd" style={{backgroundColor:"#f75c00"}}>
+    <div className="col-lg-8 p-8">
+      <h1 className="display-3 fst-bold text-center" style={{color:"white", fontWeight:"bold"}}>The Cayro Enterprise Blog</h1>
+      {/* <p className="lead mb-0"><Link href="#" className="text-body-emphasis fw-bold">Continue reading...</Link></p> */}
+    </div>
+  </div>
+
+
+
+
+
+
+  </main>
+
+
         {/* Blog Title */}
         {/* Blog List */}
         <div className="container ">
@@ -121,6 +139,7 @@ const AllBlogs = () => {
                       {/* Thumbnail */}
                       <Link className="blog-article-thumb mb-3" to={`/blog/${blog._id}`} >
                         <img
+                          // src={blog.image} style={{ aspectRatio: "2/1", objectFit: "cover" }}
                           src={blog.image} style={{ aspectRatio: "2/1", objectFit: "cover" }}
                           className="img-fluid"
 
@@ -189,7 +208,7 @@ const AllBlogs = () => {
                       Possimus, eum? Earum excepturi, itaque odio eveniet omnis nisi
                       quidem suscipit laborum maxime tempore eos dicta laboriosam.{" "}
                     </p>
-                  </div> */}
+                  </div> 
 
 
                   {/* <div className="widget widget-links mx-lg-3 pb-4 mb-4">
@@ -263,87 +282,95 @@ const AllBlogs = () => {
 
                   {/* Categories */}
                   {/* Recent Posts */}
-                  <div className="widget border-bottom mx-lg-3 pb-4 mb-4">
-                    {/* Title */}
-                    <h3 className="widget-title">Recent posts</h3>
-                    {/* Title */}
+
+
+
+                  {/* <div className="widget border-bottom mx-lg-3 pb-4 mb-4"> */}
+              
+                    {/* <h3 className="widget-title">Recent posts</h3> */}
+                  
+
+
+
+
+
+                           
+
+
+                       
+                            <div><h4 className="fst-italic">Recent posts</h4>
+          <ul className="list-unstyled">
+            <li>
+              <Link className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="#">
+                <svg className="bd-placeholder-img" width="100%" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"></rect></svg>
+                <div className="col-lg-8">
+                  <h6 className="mb-0">First Post</h6>
+                  <small className="text-body-secondary">May 15, 2024</small>
+                </div>
+              </Link>
+            </li>
+            <li>
+              <Link className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="#">
+                <svg className="bd-placeholder-img" width="100%" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"></rect></svg>
+                <div className="col-lg-8">
+                  <h6 className="mb-0">Second Post</h6>
+                  <small className="text-body-secondary">May 14, 2024</small>
+                </div>
+              </Link>
+            </li>
+            <li>
+              <Link className="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="#">
+                <svg className="bd-placeholder-img" width="100%" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"></rect></svg>
+                <div className="col-lg-8">
+                  <h6 className="mb-0">Third Post</h6>
+                  <small className="text-body-secondary">May 13, 2024</small>
+                </div>
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        <div className="p-4">
+          <h4 className="fst-italic">Products</h4>
+          <ol className="list-unstyled mb-0">
+            <li><Link href="#">Electric Iron</Link></li>
+            <li><Link href="#">Mobile Phones</Link></li>
+            <li><Link href="#">Washing Machine</Link></li>
+            <li><Link href="#">Televisions</Link></li>
+            <li><Link href="#">Speakers</Link></li>
+            <li><Link href="#">Grinder</Link></li>
+            <li><Link href="#">Cooker</Link></li>
+            <li><Link href="#">Electric Cattle</Link></li>
+            <li><Link href="#">Hand Blender</Link></li>
+            <li><Link href="#">Water Dispenser</Link></li>
+            <li><Link href="#">Air Fryer</Link></li>
+            <li><Link href="#">Sandwich Toaster Grill</Link></li>
+          </ol>
+        </div>
+
+      </div>
+    </div>
+  
+
+
+
+
                     {/* Post */}
 
-
-
-
-                    {!isLoading ? (
-                      <>
-                        <div className="row">
-
-                          {Array.from({ length: 4 }).map((_, index) => (
-
-                            <div className="blog-column-end col-md-12 mb-3">
-                              <div className="row">
-                                <div className="col-md-2 p-0">
-                                  <p className="skeleton" style={{ height: 50, borderRadius: 5, width: '100%' }} >  </p>
-
-                                </div>
-
-                                <div className="col-md-10">
-                                  <p className="skeleton p-0 mb-2" style={{ height: 20, width: '100%', borderRadius: 5, lineHeight: 0 }} >  </p>
-                                  <p className="skeleton" style={{ width: '30%', height: 20, borderRadius: 5, aspectRatio: "2/1" }} >  </p>
-
-                                </div>
-
-                              </div>
-
-                            </div>
-
-
-                          ))}
-                        </div> </>
-                    ) : (Rblogs.map(blog => (
-
-                      <>
-
-                        <div className="d-flex align-items-center mb-4" key={blog._id}>
-                          <Link className="flex-shrink-0" to={`/blog/${blog._id}`}  >
-                            <img
-                              src={blog.image} style={{ aspectRatio: "2/1.5", objectFit: "cover", width: 64 }}
-                              className="img-fluid"
-
-                            />
-                          </Link>
-                          <div className="ps-4">
-                            <h6 className="blog-article-title fs-sm mb-0">
-                              <Link to={`/blog/${blog._id}`} > {blog.title}</Link>
-                            </h6>
-                            <span className="fs-ms text-body-secondary">{formatDate(blog.createdAt)}</span>
-                          </div>
-                        </div>
-
-
-
-
-                      </>
-
-                    ))
-                    )}
-
-
-
-
-                    {/* Post */}
-
-                  </div>
+                  {/* </div> */}
                   {/* Recent Posts*/}
                   {/* Tags */}
                   {/* Tags*/}
-                </div>
-              </div>
+              {/* //   </div> */}
+            
               {/* Offcanvas */}
-            </aside>
-            {/* Sidebar */}
-          </div>
-        </div >
+         </aside>   
+      </div>
+      </div>
+      </main>
+      
         {/* Blog List*/}
-      </main >
+      
 
 
 

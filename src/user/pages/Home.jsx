@@ -128,54 +128,39 @@ const Home = () => {
         )}
       </Helmet>
 
-      <main className="page whitesmoke">
+      <main className="page white">
         {/* Hero Section */}
-        <div className="hero hero-swiper "    style={{ width: 1897, maxWidth: '100% ', height: 'auto', aspectRatio: "1897/591" }} >
-
-
-          {isLoading ? (<>
-            <div
-              className="skeleton w-100"
-              style={{ width: 1897, maxWidth: '100% ', height: 'auto', aspectRatio: "1897/591" }}
-
-            ></div>
-          </>) : (
-
-<div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-
-            <Swiper pagination={true} navigation={true} gap={'30'}  ref={swiperRefLocal}
- autoplay={{
-              delay: 1500,
-              pauseOnMouseEnter: true,
-          }}
-          
-          loop={true} modules={[Pagination, Navigation,Autoplay]} className="swiper-wrapper" >
-
-              {layout.home_slider && (
-                <>
-                  {layout.home_slider.map((image, index) => (
-                    <SwiperSlide key={index} >
-
-                      <img className="img-fluid w-100"
-                        src={image}
-                        alt="Product"
-                      />
-                    </SwiperSlide>
-
-                  ))}
-                </>
-              )}
-
-
-
-
-            </Swiper>
-            </div>
-
-          )}
-
-
-        </div>
+        <div className="d-flex" style={{ margin: '40px' }}>
+  <div className="col-9 hero hero-swiper" style={{borderRadius:"4px", backgroundColor: "white", maxWidth: '72%', height: 'auto', aspectRatio: "1897/591", marginRight: '20px' }}>
+    {isLoading ? (
+      <div className="skeleton w-100" style={{borderRadius:"4px", width: '100%', height: 'auto', aspectRatio: "1897/591" }}></div>
+    ) : (
+      <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <Swiper
+          pagination={{ clickable: true }}
+          navigation
+          autoplay={{ delay: 1500, pauseOnMouseEnter: true }}
+          loop
+          modules={[Pagination, Navigation, Autoplay]}
+          className="swiper-wrapper"
+          ref={swiperRefLocal}
+        >
+          {layout.home_slider && layout.home_slider.map((image, index) => (
+            <SwiperSlide key={index}>
+              <img className="img-fluid w-100" src={image} alt="Product" />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+    )}
+  </div>
+  <div className="col-3" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div className="card" style={{ width: '100%', maxWidth: '338px', bottom:"14px",padding:"2px" , boxShadow: '0 4px 4px rgba(0, 0, 0, 0.1)', borderRadius: '6px' }}>
+      <img src="https://img.freepik.com/premium-vector/pos-payment-terminal-approved-payment-vector-stock-illustration_100456-2343.jpg?w=740" alt="Side Image" style={{ width: '100%', height: 'auto', borderRadius: '4px' }} />
+    </div>
+  </div>
+</div>
+{/* https://img.freepik.com/free-vector/contactless-payment-with-hand-holding-credit-card_23-2147676748.jpg?t=st=1718084455~exp=1718088055~hmac=695507238a4b0e311ea8c76322783a29bf26eadd99d949171801cf42dc6b9786&w=740 */}
         {/* Hero Section */}
         {/* Benefits */}
 
@@ -527,7 +512,8 @@ const Home = () => {
 
           </div>
 
-          <div className="row mt-4 pt-2 mx-n2 hero-swiper ">
+          <div className="row mt-4 pt-2 mx-n2 hero-swiper " style={{ fontFamily:"sans-serif"}
+          }>
             <Swiper breakpoints={{
               300: {
                 slidesPerView: 2,
@@ -630,7 +616,7 @@ const Home = () => {
                 <SwiperSlide key={index} >
                   <div
                     className="card-1 skeleton"
-                    style={{ height: 371, borderRadius: 10 }}
+                    style={{ height: "371", borderRadius: 10 }}
                   ></div>
 
                 </SwiperSlide>
@@ -814,7 +800,7 @@ const Home = () => {
         </div>
         {/* Banner */}
 
-
+      
 
         {/* Product Cards */}
         <div className="container pt-0 pt-sm-5">

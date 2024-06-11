@@ -11,8 +11,10 @@ function fetchData($url) {
 }
 
 // API URLs
-$productUrl = 'https://backend-9mwl.onrender.com/all-products';
-$categoryUrl = 'https://backend-9mwl.onrender.com/all-category';
+// $productUrl = 'https://backend-9mwl.onrender.com/all-products';
+// $categoryUrl = 'https://backend-9mwl.onrender.com/all-category';
+$productUrl = 'http://localhost:3050/all-products';
+$categoryUrl = 'http://localhost:3050/all-category';
 
 // Fetch product data
 $productData = fetchData($productUrl);

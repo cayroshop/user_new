@@ -5,6 +5,8 @@ import { authActions } from "../../redux/store";
 import toast from "react-hot-toast";
 import TokenValidator from "../../fetchdata/TokenValidator";
 import Cart from "./Cart";
+import { BiSolidHot } from "react-icons/bi";
+import { MdLocalOffer } from "react-icons/md";
 import logo from "../assets_user/img/logo/ecomm-logo.svg"; // Import the logo image
 import { useBlogContext } from "../../fetchdata/BlogContext";
 import $ from "jquery";
@@ -297,7 +299,7 @@ const Header = () => {
               {!isLogin && (
                 <>
                   <li>
-                    <Link to="/login">login</Link>
+                    <Link to="/login">Login</Link>
                   </li>
 
                   <li>
@@ -369,7 +371,7 @@ const Header = () => {
                   to="/"
                 >
                   {Headers.meta_logo && Headers.meta_logo !== undefined ? (
-                    <img src={Headers.meta_logo} width={300} alt="logo" />
+                    <img src={Headers.meta_logo} width={54} alt="logo" />
                   ) : (
                     <div
                       className="card-1 skeleton"
@@ -379,7 +381,7 @@ const Header = () => {
                 </Link>
                 {/* Logo */}
                 {/* Search */}
-                <div className={`input-group d-none d-lg-flex me-5 w-500 searchbox ${!showSearch && ('search-view')} `}>
+                {/* <div className={`input-group d-none d-lg-flex me-5 w-500 searchbox ${!showSearch && ('search-view')} `}>
                   <button
                     type="button"
                     className="btn btn-primary bg-gradient d-none d-lg-block search"
@@ -417,7 +419,7 @@ const Header = () => {
                       ))}
 
 {filteredProducts.length === 0 && filteredCategories.length === 0 ? (
-    <li className="bg-danger "> <p className="pt-1 px-3 text-center text-white"> Not Product & Category Found </p> </li>
+    <li className="bg-danger "> <p className="pt-1 px-3 text-center text-white"> No Product & Category Found </p> </li>
 ) : null}
 
 
@@ -442,7 +444,7 @@ const Header = () => {
               <option>Consoles</option>
               <option>Games</option>
               <option>Storage</option>
-            </select> */}
+            </select> 
                   {searchQuery && (
                     <>
                       <button
@@ -455,9 +457,77 @@ const Header = () => {
                       </button>
                     </>
                   )}
-                </div>
+                </div> */}
                 {/* Search */}
                 {/* Navbar Actions */}
+
+
+                <div className={`input-group d-none d-lg-flex me-5 searchbox ${!showSearch && 'search-view'}`}>
+  <button
+    type="button"
+    className="btn btn-primary bg-gradient d-none d-lg-block search"
+  >
+  </button>
+
+  <div className="wrap">
+    <div className="search">
+      <input
+        type="text"
+        className="searchTerm"
+        placeholder="What are you looking for?"
+        value={searchQuery}
+        onChange={handleInputChange}
+      />
+      <button type="submit" className="searchButton">
+        <Link to="/" className="daily-deals-badge1 d-none d-xl-inline-block d-2xl-inline-block"><MdLocalOffer /> Daily Deals</Link>
+        <Link to="/" className="daily-deals-badge2 d-none d-xl-inline-block d-2xl-inline-block"><BiSolidHot /> Hot Deals</Link>
+        <i className="ri-search-line"></i>
+      </button>
+    </div>
+  </div>
+
+  {searchQuery && (
+    <ul className="searchfloat">
+      {filteredProducts.length > 0 ? filteredProducts.map(item => (
+        <li key={item.id}>
+          <Link to={`/product/${item._id}`} onClick={handleClearClick}>
+          <i className="ri-search-line" style={{color:"#f55a01" , fontWeight:"bolder"}}></i>       {item.title}  
+                
+          </Link>
+        </li>
+      )) : null}
+
+      {filteredCategories.length > 0 ? filteredCategories.map(item => (
+        <li key={item.id}>
+          <Link to={`/category/${item._id}`} onClick={handleClearClick}>
+            <i className="ri-list-check-2"></i> {item.title}
+          </Link>
+        </li>
+      )) : null}
+
+      {filteredProducts.length === 0 && filteredCategories.length === 0 && (
+        <li className="bg-info-inverse">
+          <p className="pt-1 px-3 text-center text-white"> No Product & Category Found </p>
+        </li>
+      )}
+    </ul>
+  )}
+
+  {searchQuery && (
+    <button
+      type="button"
+      className="btn btn-primary bg-gradient d-lg-block close"
+      onClick={handleClearClick}
+    >
+      <i className="navbar-actions-icon ri-close-line fs-7"></i>
+    </button>
+  )}
+</div>
+
+
+
+
+    
                 <div className="navbar-actions">
                   <Link
                     className="navbar-actions-item navbar-stuck-toggle"

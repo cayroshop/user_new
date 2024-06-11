@@ -645,7 +645,22 @@ legend+* {
 ::-webkit-search-decoration {
   -webkit-appearance: none;
 }
-
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 15px; /* Adjust padding */
+  transform: translateY(-50%);
+  color: #76797e;
+  font-size: 20px;
+}
+.form-control.searchinput {
+  width: 100%;
+  padding: 10px 40px 10px 50px; /* Adjust padding for the icon */
+  border-radius: 25px;
+  border: 1px solid #ddd;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 ::-webkit-color-swatch-wrapper {
   padding: 0;
 }
@@ -21257,6 +21272,7 @@ ul.dropdown-menu .dropdown-toggle::after {
 
 .hero-swiper span.swiper-pagination-bullet {
   width: 20px;
+
   border-radius: 0px;
   height: 5px;
 }
@@ -21512,7 +21528,7 @@ input.searchinput:focus {
   border-radius: 100% !important;
   background: white !important;
   z-index: 9999;
-  right: 7px;
+   right: 3px;
   border: none;
   box-shadow: 0px 0px 5px -2px #0a16256e;
 }
@@ -22488,15 +22504,16 @@ div.loading_icon {
 }
 
 ul.searchfloat {
-  padding: 0px 0px;
+  padding: 0px 4px;
   position: absolute;
   top: 49px;
+  font-family: 'Times New Roman', Times, serif !important;
   z-index: 9999;
-  background: #eff8fe;
-  width: 100%;
-  left: 0px;
+  background: white;
+  width: 56%;
+  left: 224px;
   border-radius: 5px !important;
-  border: 2px solid #000000;
+  border: 1px solid #000000;
   border-bottom-left-radius: 6px !important;
   border-bottom-right-radius: 6px !important;
   max-height: 300px;
@@ -22505,19 +22522,21 @@ ul.searchfloat {
 
 /* width */
 ul.searchfloat::-webkit-scrollbar {
-  width: 5px;
+  background-color: white;
+  color: #f55a01;
+  width: 10px;
 
 }
 
 /* Track */
 ul.searchfloat::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: white;
   border-radius: 10px;
 }
 
 /* Handle */
 ul.searchfloat::-webkit-scrollbar-thumb {
-  background: #00406e;
+  background:gray;
 }
 
 /* Handle on hover */
@@ -22528,20 +22547,25 @@ ul.searchfloat::-webkit-scrollbar-thumb:hover {
 
 ul.searchfloat>li {
   display: block;
-  border-bottom: 2px solid #00406e;
-  color: #00406e !important;
+  font-family: 'Times New Roman', Times, serif !important;
+  border-bottom: 0.3px solid #ddd;
+  color: black !important;
+  padding: 0.5rem;
+  text-transform: lowercase;
   text-transform: capitalize;
 }
 
 ul.searchfloat>li>a {
-  padding: 10px;
+  padding: 4px;
+  font-size: 14px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif !important;
   display: block;
-  color: #00406e !important;
+  color: black !important;
 }
 
 ul.searchfloat>li>a:hover {
-  background: #00406e !important;
-  color: white !important;
+  /* background:#FFDBBB ; */
+  color: #f55a01 !important;
 }
 
 
@@ -22983,7 +23007,23 @@ li.breadcrumb-item.text-nowrap {
   .searchbox button.btn.search {
     display: flex !important;
   }
-
+  .searchfloat {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    width: 100%;
+    background: #eff8fe;
+    border: 1px solid #ddd;
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    margin-top: 5px;
+    list-style: none;
+    padding: 0;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
   .searchbox.search-view {
     display: flex !important;
   }
@@ -23258,3 +23298,87 @@ table.carttable img {
   }
   
   }
+
+
+
+  .search {
+    width: 100%;
+    position: relative;
+    display: flex;
+  }
+  
+  .searchTerm {
+    width: 100%;
+    border: 2px solid var(--bs-accent) !important;
+    border-right: none;
+    padding: 20px;
+    height: 36px;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    color: #9DBFAF;
+  }
+  
+  .searchTerm:focus{
+    color: var(--bs-accent) !important;
+  }
+  
+  .searchButton {
+    width: 42px;
+    height: 42.5px;
+    border: 1px solid var(--bs-accent) !important;
+    background:var(--bs-accent) !important;
+    text-align: center;
+    color: #fff;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    font-size: 20px;
+  }
+  
+  /*Resize the wrap to see the search bar change!*/
+  .wrap{
+    width: 60%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  @media (max-width: 1340px) {
+    .daily-deals-badge2{
+      left:25px;
+    }
+    .daily-deals-badge1{
+      display: none !important;
+    }
+  }
+
+  .daily-deals-badge1 {
+    position: absolute;
+    top: 50%;
+    left: 524px; 
+    transform: translateY(-50%);
+    background-color:#D3D3D3; 
+    color: black; 
+    padding: 4px 6px; 
+    font-size: 12px; 
+     /* animation: fadeOut 5s forwards; */
+    border-radius: 4px; 
+  }
+  
+  .daily-deals-badge2 {
+    position: absolute;
+    top: 50%;
+    left: 440px; 
+    transform: translateY(-50%);
+    background-color:#D3D3D3; 
+    color: black; 
+    padding: 4px 6px; 
+    font-size: 12px; 
+    /* animation: fadeOut 10s forwards; */
+    border-radius: 4px; 
+  }
+  
+
+  /* ///////////////////////////////////////////////// */
+
+  
